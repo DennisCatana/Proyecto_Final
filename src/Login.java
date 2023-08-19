@@ -16,6 +16,7 @@ public class Login {
         frame.setContentPane(new Login().Login);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(700, 350);
+        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
 }
