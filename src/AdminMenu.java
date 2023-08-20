@@ -5,7 +5,7 @@ public class AdminMenu {
     private JPanel Opciones;
     private JButton ventasButton;
     private JButton cajerosButton;
-    private JButton cerrarSesiónButton;
+    private JButton cerrarBt;
     private JButton productosButton;
 
     public static void main(String[] args) {
