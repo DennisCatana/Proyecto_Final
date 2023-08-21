@@ -1,4 +1,6 @@
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class Login {
 
@@ -10,6 +12,20 @@ public class Login {
     private JPanel Datos;
     private JButton entrarButton;
 
+
+    public Login() {
+        // Para que al momento de iniciar el Form no aparezca señalado ningun botón
+        Login.setFocusable(true);
+        Login.requestFocusInWindow();
+
+        // Lógica para el inicio de sesión
+        entrarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+    }
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("Login");

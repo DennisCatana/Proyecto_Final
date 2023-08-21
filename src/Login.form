@@ -119,6 +119,7 @@
             </constraints>
             <properties>
               <background color="-8430864"/>
+              <font name="Inter"/>
               <foreground color="-1184275"/>
               <hideActionText value="false"/>
               <text value="Entrar"/>
