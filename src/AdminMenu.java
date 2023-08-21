@@ -1,6 +1,4 @@
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class AdminMenu {
     private JPanel AdminMenu;
@@ -9,7 +7,9 @@ public class AdminMenu {
     private JButton cerrarBt;
     private JButton productosButton;
     private JButton cajerosButton;
-    private JPanel Productos;
+    private JPanel OP_Productos;
+    private JPanel OP_Ventas;
+    private JPanel OP_Cajeros;
 
     public AdminMenu() {
         // Para que al momento de iniciar el Form no aparezca señalado ningun botón
