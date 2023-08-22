@@ -49,7 +49,7 @@ public class Login {
                             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                             closeLoginFrame();
                             frame.pack();
-                            frame.setSize(700, 350);
+                            frame.setSize(1000, 500);
                             frame.setLocationRelativeTo(null);
                             frame.setVisible(true);}
 
@@ -60,7 +60,7 @@ public class Login {
                             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                             closeLoginFrame();
                             frame.pack();
-                            frame.setSize(700, 350);
+                            frame.setSize(1000, 500);
                             frame.setLocationRelativeTo(null);
                             frame.setVisible(true);}}
 
