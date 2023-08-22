@@ -1,7 +1,7 @@
 import javax.swing.*;
 
 public class Cajeros {
-    private JPanel Cajeros;
+    JPanel Cajeros;
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("Cajeros");

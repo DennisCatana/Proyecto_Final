@@ -1,7 +1,7 @@
 import javax.swing.*;
 
 public class AdminMenu {
-    private JPanel AdminMenu;
+    JPanel AdminMenu;
     private JPanel Opciones;
     private JButton ventasButton;
     private JButton cerrarBt;
