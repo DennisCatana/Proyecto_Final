@@ -69,7 +69,7 @@ public class AdminMenu {
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 closeAdminMenuFrame();
                 frame.pack();
-                frame.setSize(1000, 500);
+                frame.setSize(700, 350);
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
             }

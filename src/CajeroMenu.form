@@ -110,9 +110,12 @@
         <properties/>
         <border type="none" title=""/>
         <children>
-          <component id="618b6" class="javax.swing.JTable" binding="Nombre" custom-create="true">
+          <component id="618b6" class="javax.swing.JTable" binding="Factura">
             <constraints/>
             <properties/>
+            <clientProperties>
+              <JTable.autoStartsEdit class="java.lang.Boolean" value="false"/>
+            </clientProperties>
           </component>
         </children>
       </scrollpane>
