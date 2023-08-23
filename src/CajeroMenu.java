@@ -7,6 +7,9 @@ public class CajeroMenu {
      JPanel CajeroMenu;
     private JButton cerrarBt;
     private JPanel Opciones;
+    private JButton busquedaButton;
+    private JTextField busqueda;
+    private JTable Nombre;
 
     public CajeroMenu() {
         cerrarBt.addActionListener(new ActionListener() {
@@ -34,5 +37,9 @@ public class CajeroMenu {
         frame.setSize(1000, 450);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+    }
+
+    private void createUIComponents() {
+        // TODO: place custom component creation code here
     }
 }
