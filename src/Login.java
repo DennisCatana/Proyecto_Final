@@ -4,7 +4,7 @@ import java.awt.event.ActionListener;
 
 public class Login {
 
-    JPanel Login;
+     JPanel Login;
     private JComboBox<String> rolBox;
     private JTextField user;
     private JPasswordField password;

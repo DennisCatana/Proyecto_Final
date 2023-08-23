@@ -11,7 +11,15 @@ public class Productos {
         regresarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                JFrame frame;
+                frame = new JFrame("AdminMenu");
+                frame.setContentPane(new AdminMenu().AdminMenu);
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                closeProductosFrame();
+                frame.pack();
+                frame.setSize(1000, 500);
+                frame.setLocationRelativeTo(null);
+                frame.setVisible(true);
             }
         });
     }
