@@ -56,9 +56,8 @@ public class Login {
                         //Condicional que verifica que el comboBox este en Cajero y que se ingresen el usuario y contraseña del cajero
                         else if (seleccionar.equals("Cajero") && cajero.equals(user.getText()) && contracajero.equals(new String(password.getPassword()))) {
                             frame = new JFrame("Cajero");
-                            frame.setContentPane(new Cajeros().Cajeros);
+                            frame.setContentPane(new CajeroMenu().CajeroMenu);
                             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
                             closeLoginFrame();
                             frame.pack();
                             frame.setSize(1000, 500);
