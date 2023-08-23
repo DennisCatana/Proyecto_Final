@@ -3,6 +3,10 @@ import javax.swing.*;
 public class Cajeros {
     JPanel Cajeros;
 
+    private void closeCajerosFrame() {
+        JFrame loginFrame = (JFrame) SwingUtilities.getWindowAncestor(Cajeros);
+        loginFrame.dispose();}
+
     public static void main(String[] args) {
         JFrame frame = new JFrame("Cajeros");
         frame.setContentPane(new Cajeros().Cajeros);

@@ -58,6 +58,7 @@ public class Login {
                             frame = new JFrame("Cajero");
                             frame.setContentPane(new Cajeros().Cajeros);
                             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
                             closeLoginFrame();
                             frame.pack();
                             frame.setSize(1000, 500);
