@@ -5,6 +5,7 @@ public class CajeroMenu {
     private JPanel CajeroMenu;
     private JButton cerrarBt;
     private JPanel Opciones;
+    private JButton button1;
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("Cajero - Menú Principal");
