@@ -5,7 +5,9 @@ public class CajeroMenu {
     private JPanel CajeroMenu;
     private JButton cerrarBt;
     private JPanel Opciones;
-    private JButton button1;
+    private JButton busquedaButton;
+    private JTextField busqueda;
+    private JTable Nombre;
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("Cajero - Menú Principal");
@@ -14,5 +16,9 @@ public class CajeroMenu {
         frame.setSize(1000, 450);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+    }
+
+    private void createUIComponents() {
+        // TODO: place custom component creation code here
     }
 }
