@@ -15,6 +15,13 @@ public class CajeroMenu {
     private JLabel nomProd;
     private JTextField busqueda;
     private JButton buscarButton;
+    private JButton borrarButton;
+
+    // Configuración de la conexión a la base de datos
+    static String DB_URL = "jdbc:mysql://localhost/medical";
+    static String USER = "root";
+    static String PASS = "root";
+    static String QUERY = "SELECT * FROM Usuario";
 
     public CajeroMenu() {
         cerrarBt.addActionListener(new ActionListener() {
@@ -35,12 +42,9 @@ public class CajeroMenu {
         DefaultTableModel model = new DefaultTableModel(
             // Contenido de la Tabla
             new Object[][] {
-                {"1", "Producto 1", "10.00"},
-                {"2", "Producto 2", "15.00"},
-                {"3", "Producto 3", "20.00"}
             },
             // Nombrar las columnas
-            new String[]{"ID","Nombre","Precio"});
+            new String[]{"Codigo","Cantidad","Descripción","Valor Unitario", "Valor Total"});
         // Poner el modelo hecho en el Jtable
         Factura.setModel(model);
 
@@ -48,7 +52,39 @@ public class CajeroMenu {
         buscarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                String codigoProducto = busqueda.getText(); // Obtener el código del producto
+                // Realizar la búsqueda en la base de datos
+                String nombreProductoEncontrado = buscarNombreProducto(codigoProducto);
+                // Actualizar el texto de la etiqueta con el nombre del producto encontrado.
+                nomProd.setText(nombreProductoEncontrado);
+            }
+        });
 
+        // Botón del seleccionar
+        seleccionarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String codigoProducto = busqueda.getText(); // Obtener el código del producto
+                int cantidadSeleccionada = Integer.parseInt(cantidad.getText()); // Obtener la cantidad
+
+                String nombreProducto = buscarNombreProducto(codigoProducto);
+                double valorUnitario = obtenerValorUnitario(codigoProducto);
+                double valorTotal = valorUnitario * cantidadSeleccionada;
+
+                DefaultTableModel model = (DefaultTableModel) Factura.getModel();
+                model.addRow(new Object[]{codigoProducto, cantidadSeleccionada, nombreProducto, valorUnitario, valorTotal});
+            }
+        });
+
+        // Para Borrar una fila de la tabla
+        borrarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int selectedRow = Factura.getSelectedRow();
+                if (selectedRow != -1) {
+                    DefaultTableModel model = (DefaultTableModel) Factura.getModel();
+                    model.removeRow(selectedRow);
+                }
             }
         });
     }
@@ -70,5 +106,46 @@ public class CajeroMenu {
         Factura = new JTable();
     }
 
+    // Función para Buscar productos
+    private String buscarNombreProducto(String codigoProducto) {
+        String nombreProducto = "Producto no encontrado"; // Valor por defecto
+
+        try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)) {
+            String QueryBuscar = "SELECT nombreProducto FROM Producto WHERE idProducto = ?";
+            try (PreparedStatement statement = connection.prepareStatement(QueryBuscar)) {
+                statement.setString(1, codigoProducto);
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    if (resultSet.next()) {
+                        nombreProducto = resultSet.getString("nombreProducto");
+                    }
+                }
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return nombreProducto;
+    }
+
+    // Para encontrar el precio o valor unitario de cada producto
+    private double obtenerValorUnitario(String codigoProducto) {
+        double valorUnitario = 0.0;
+
+        try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)) {
+            String sql = "SELECT precio FROM Producto WHERE idProducto = ?";
+            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                statement.setString(1, codigoProducto);
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    if (resultSet.next()) {
+                        valorUnitario = resultSet.getDouble("precio");
+                    }
+                }
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+        return valorUnitario;
+    }
 
 }
