@@ -2,15 +2,19 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.table.DefaultTableModel;
+import java.sql.*;
 
 public class CajeroMenu {
 
     JPanel CajeroMenu;
     private JButton cerrarBt;
     private JPanel Opciones;
-    private JButton busquedaButton;
-    private JTextField busqueda;
     private JTable Factura;
+    private JTextField cantidad;
+    private JButton seleccionarButton;
+    private JLabel nomProd;
+    private JTextField busqueda;
+    private JButton buscarButton;
 
     public CajeroMenu() {
         cerrarBt.addActionListener(new ActionListener() {
@@ -39,6 +43,14 @@ public class CajeroMenu {
             new String[]{"ID","Nombre","Precio"});
         // Poner el modelo hecho en el Jtable
         Factura.setModel(model);
+
+        // Botón del buscar
+        buscarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
     }
     private void closeCajeroMenuFrame() {
         JFrame loginFrame = (JFrame) SwingUtilities.getWindowAncestor(CajeroMenu);
