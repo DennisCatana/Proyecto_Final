@@ -10,7 +10,7 @@ CREATE TABLE Usuario (
     tipoUsuario ENUM('Cajero', 'Administrador'),
     contraseña VARCHAR(255),
     salario DECIMAL(10, 2),
-    fechaContratacion DATE
+    fechaContratacion varchar(35)
 );
 
 -- Crear tabla Producto
