@@ -207,7 +207,7 @@ public class CajeroMenu {
                 ResultSet generatedKeys = statement.getGeneratedKeys();
                 if (generatedKeys.next()) {
                     int idDetalleVentaGenerado = generatedKeys.getInt(1); // Obtener el idDetalleVenta generado
-                    System.out.println("IdDetalleVenta generado: " + idDetalleVentaGenerado);
+                    System.out.println("Número de la Transacción generada: " + idDetalleVentaGenerado);
                 }
             }
         } catch (SQLException ex) {
