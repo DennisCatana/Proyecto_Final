@@ -42,8 +42,7 @@ public class Productos {
         buscarProductoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                mostrarProductos();
-                //buscarProducto();
+                buscarProducto();
             }
         });
 
@@ -53,6 +52,7 @@ public class Productos {
                 if(diferente(Integer.parseInt(idProducto.getText()))==false){
                     agregarProducto(Integer.parseInt(idProducto.getText()),nombreProducto.getText(),descripcionProducto.getText(),Integer.parseInt(stock.getText()),Float.parseFloat(precio.getText()));
                     JOptionPane.showMessageDialog(null,"Producto agregado");
+                    limpiar();
                 }
                 else {
                     JOptionPane.showMessageDialog(null,"Ese id ya lo usa otro producto");
@@ -65,6 +65,7 @@ public class Productos {
             public void actionPerformed(ActionEvent e) {
                 actualizarProducto(Integer.parseInt(idProducto.getText()),nombreProducto.getText(),descripcionProducto.getText(),Integer.parseInt(stock.getText()),Float.parseFloat(precio.getText()));
                 JOptionPane.showMessageDialog(null,"Producto actualizado");
+                limpiar();
             }
         });
 
@@ -73,12 +74,13 @@ public class Productos {
             public void actionPerformed(ActionEvent e) {
                 eliminarProducto(Integer.parseInt(idProducto.getText()));
                 JOptionPane.showMessageDialog(null,"Producto eliminado");
+                limpiar();
             }
         });
         limpiarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                limpiar();
+                mostrarProductos();
             }
         });
     }
