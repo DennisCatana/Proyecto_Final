@@ -72,6 +72,8 @@ public class Cajeros {
 
                 //paso parametros al metodo
                 Ingresar(idx, nomx, apex, rolx, contrax, suelx, fingrx);
+                //mustra listado con nuevo ingreso
+                Mostrar();
             }
         });
         eliminarUsuarioButton.addActionListener(new ActionListener() {
@@ -79,6 +81,8 @@ public class Cajeros {
             public void actionPerformed(ActionEvent e) {
                 idx = id.getText();
                 Eliminar(idx);
+                //muestra listado con usuario eliminado
+                Mostrar();
             }
         });
         actualizarInformaciónButton.addActionListener(new ActionListener() {
@@ -93,6 +97,8 @@ public class Cajeros {
                 fingrx = fIngreso.getText().trim();
 
                 Actualizar(idx, nomx, apex, rolx, contrax, suelx, fingrx);
+                //muestra usuario actualizado
+                Mostrar();
             }
         });
         buscarButton.addActionListener(new ActionListener() {
