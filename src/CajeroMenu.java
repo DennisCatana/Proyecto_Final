@@ -5,7 +5,8 @@ import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.PdfAction;
-
+import com.itextpdf.text.Image;
+import com.itextpdf.text.pdf.PdfWriter;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -32,7 +33,6 @@ public class CajeroMenu {
     private JTextField busqueda;
     private JButton buscarButton;
     private JButton borrarButton;
-    private JPanel DatosEmpresa;
     private JPanel Comandos;
     private JPanel Venta;
     private JPanel DatosCliente;
@@ -41,6 +41,10 @@ public class CajeroMenu {
     private JTextField dirCli;
     private JTable Total;
     private JButton imprimirFac;
+    private JLabel ruc;
+    private JLabel sucursal;
+    private JLabel adress;
+    private JLabel title;
 
     // Configuración de la conexión a la base de datos
     static String DB_URL = "jdbc:mysql://localhost/MEDICAL";
@@ -154,11 +158,21 @@ public class CajeroMenu {
             PdfWriter.getInstance(document, new FileOutputStream(nombreArchivoPDF));
             document.open();
 
+            //Imagen de cabecera
+            Image header = Image.getInstance("src/images/logo.png");
+            header.scaleAbsolute(50,50);
+            header.setAlignment(Chunk.ALIGN_RIGHT);
+            document.add(header);
+            //Cabecera de factura
+            document.add(new Paragraph( title.getText()));
+            document.add(new Paragraph( adress.getText()));
+            document.add(new Paragraph( sucursal.getText()));
+            document.add(new Paragraph( ruc.getText()+"                   "+"Nota de Venta Nº " + numeroFactura+"\n\n" ));
+
             // Información de la factura
-            document.add(new Paragraph("Nota de Venta Nº " + numeroFactura ));
             document.add(new Paragraph("Fecha: " + new java.util.Date()+"\n"));
             document.add(new Paragraph("Cliente: " + nomCli.getText()+"\n"));
-            document.add(new Paragraph("Direccion: " + dirCli.getText()+"\n\n"));
+            document.add(new Paragraph("Dirección: " + dirCli.getText()+"\n\n"));
 
             // Detalles de los productos en la factura
             DefaultTableModel detalleModel = (DefaultTableModel) Factura.getModel();
