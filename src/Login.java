@@ -58,34 +58,16 @@ public class Login {
                             frame.setVisible(true);
                         }
                     } else if (selec.equals("Seleccionar")) {
-                        frame = new JFrame("Credenciales");
-                        frame.setContentPane(new Credenciales().crede);
-                        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                        frame.pack();
-                        frame.setSize(200, 200);
-                        frame.setLocationRelativeTo(null);
-                        frame.setVisible(true);
+                        JOptionPane.showMessageDialog(null,"Usuario o contrseña incorrectos");
                     }
                 } else {
-                    frame = new JFrame("Incorrecto");
-                    frame.setContentPane(new Incorrecto().inco);
-                    frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                    frame.pack();
-                    frame.setSize(200, 200);
-                    frame.setLocationRelativeTo(null);
-                    frame.setVisible(true);
-                    hayInformacionUsuario = true;
-                    hayInformacionContrasenia = true;
+                    JOptionPane.showMessageDialog(null,"No has seleccionado un rol");
+                    //hayInformacionUsuario = true;
+                    //hayInformacionContrasenia = true;
                 }
 
                 if (seleccionar.equals("Seleccione") && !hayInformacionUsuario && !hayInformacionContrasenia) {
-                    frame = new JFrame("Incorrecto");
-                    frame.setContentPane(new Incorrecto().inco);
-                    frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-                    frame.pack();
-                    frame.setSize(200,200);
-                    frame.setLocationRelativeTo(null);
-                    frame.setVisible(true);
+                    JOptionPane.showMessageDialog(null,"No has ingresado ningun campo y no has seleccionado un rol");
                 }
                 veriusu = "";
                 vericontra = "";
