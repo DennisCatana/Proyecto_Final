@@ -12,11 +12,11 @@ public class Login {
     private JPanel Datos;
     private JButton entrarButton;
     private String seleccionar;
-
+    protected static int idCajeroActual;
     // Configuración de la conexión a la base de datos
     static String DB_URL = "jdbc:mysql://localhost/MEDICAL";
     static String USER = "root";
-    static String PASS = "root_bas3";
+    static String PASS = "root";
     static String QUERY = "SELECT * FROM Usuario";
     static String veriusu;
     static String vericontra;
@@ -100,6 +100,9 @@ public class Login {
                 }
                 if (seleccionar.equals(rs.getString("tipoUsuario")) && contra.equals(rs.getString("contraseña")) && usu.equals(rs.getString("idUsuario"))) {
                     selec = rs.getString("tipoUsuario");
+                    if (selec.equals("Cajero")) {
+                        CajeroMenu.setIdCajeroActual(Integer.parseInt(veriusu));
+                    }
                 }
             }
         } catch (SQLException ex) {

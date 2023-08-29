@@ -10,47 +10,41 @@ CREATE TABLE Usuario (
     tipoUsuario ENUM('Cajero', 'Administrador'),
     contraseña VARCHAR(255),
     salario DECIMAL(10, 2),
-    fechaContratacion varchar(35)
+    fechaContratacion DATE
 );
 
 -- Crear tabla Producto
 CREATE TABLE Producto (
     idProducto INT PRIMARY KEY,
     nombreProducto VARCHAR(100),
-    descripcionProducto TEXT, -- Nueva columna
+    descripcionProducto TEXT,
     stock INT,
     precio DECIMAL(10, 2)
 );
 
 -- Crear tabla NotaDeVenta
 CREATE TABLE NotaDeVenta (
-    idNotaVenta INT PRIMARY KEY,
+    idNotaVenta INT AUTO_INCREMENT PRIMARY KEY,
     fecha DATE,
     total DECIMAL(10, 2),
     subtotal DECIMAL(10, 2),
     iva DECIMAL(10, 2),
     idUsuario INT,
+    nombreCliente VARCHAR(100),
+    cedulaCliente VARCHAR(20),
+    direccionCliente VARCHAR(200),
     FOREIGN KEY (idUsuario) REFERENCES Usuario(idUsuario)
 );
 
--- Crear tabla Transaccion
-CREATE TABLE Transaccion (
-    idTransaccion INT PRIMARY KEY,
-    fecha DATE,
-    idUsuario INT,
-    FOREIGN KEY (idUsuario) REFERENCES Usuario(idUsuario)
-);
-
--- Crear tabla DetalleTransac
-CREATE TABLE DetalleTransac (
-    idDetalleTransac INT PRIMARY KEY,
+-- Crear tabla DetalleVenta
+CREATE TABLE DetalleVenta (
+    idDetalleVenta INT AUTO_INCREMENT PRIMARY KEY,
     idTransaccion INT,
     idProducto INT,
     cantidad INT,
-    FOREIGN KEY (idTransaccion) REFERENCES Transaccion(idTransaccion),
+    FOREIGN KEY (idTransaccion) REFERENCES NotaDeVenta(idNotaVenta),
     FOREIGN KEY (idProducto) REFERENCES Producto(idProducto)
 );
-
 -- Insertar usuarios
 INSERT INTO Usuario (idUsuario, nombre, apellido, tipoUsuario, contraseña, salario, fechaContratacion)
 VALUES
@@ -72,49 +66,10 @@ VALUES
     (9, 'Pastillas para el resfriado', 'Medicamento para aliviar los síntomas del resfriado.', 90, 7.99),
     (10, 'Vitaminas multivitamínicas', 'Suplemento que proporciona una variedad de vitaminas y minerales esenciales.', 150, 10.99);
 
--- Insertar transacción
-INSERT INTO Transaccion (idTransaccion, fecha, idUsuario)
-VALUES (1, '2023-08-19',303030); -- Asignar a Cajero 1
-
--- Insertar detalles de transacción
-INSERT INTO DetalleTransac (idDetalleTransac, idTransaccion, idProducto, cantidad)
-VALUES
-    (1, 1, 1, 2), -- Detalle 1: producto 1, cantidad 2
-    (2, 1, 3, 1); -- Detalle 2: producto 3, cantidad 1
-
--- Insertar nota de venta
-INSERT INTO NotaDeVenta (idNotaVenta, fecha, total, subtotal, iva, idUsuario)
-VALUES (1, '2023-08-19', 50.99, 45.00, 5.99, 303030); -- Asignar a Cajero 1
+SELECT * FROM Usuario;
+SELECT * FROM Producto;
+SELECT * FROM NotaDeVenta;
+SELECT * FROM DetalleVenta;
 
 
-SELECT *FROM USUARIO;
-SELECT *FROM PRODUCTO;
-SELECT *FROM TRANSACCION;
-SELECT *FROM DETALLETRANSAC;
-SELECT *FROM NOTADEVENTA;
-
--- Query para buscar las ventas que hizo un cajero especifico
-SELECT
-    U.idUsuario AS CajeroID,
-    U.nombre AS CajeroNombre,
-	NV.idNotaVenta,
-	NV.fecha,
-	P.nombreProducto AS NombreProducto,
-    DT.cantidad AS Cantidad,
-    NV.total
-FROM
-    NotaDeVenta NV
-JOIN
-    Transaccion T ON NV.idNotaVenta = T.idTransaccion
-JOIN
-    DetalleTransac DT ON T.idTransaccion = DT.idTransaccion
-JOIN
-    Producto P ON DT.idProducto = P.idProducto
-JOIN
-    Usuario U ON T.idUsuario = U.idUsuario
-WHERE
-    U.tipoUsuario = 'Cajero' -- Filtrar por tipo de usuario (Cajero)
-    AND U.idUsuario = 303030 -- Cambia 2 por el ID del cajero específico
-ORDER BY
-    NV.fecha;
 

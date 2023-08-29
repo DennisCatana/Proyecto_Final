@@ -1,19 +1,15 @@
 import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.PdfFormField;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.pdf.PdfAction;
 import com.itextpdf.text.Image;
-import com.itextpdf.text.pdf.PdfWriter;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.io.FileOutputStream;
-import java.io.Writer;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.text.DecimalFormat;
@@ -45,11 +41,13 @@ public class CajeroMenu {
     private JLabel sucursal;
     private JLabel adress;
     private JLabel title;
+    protected static int idCajeroActual;
+    private int numeroNotaVenta = -1;
 
     // Configuración de la conexión a la base de datos
     static String DB_URL = "jdbc:mysql://localhost/MEDICAL";
     static String USER = "root";
-    static String PASS = "root_bas3";
+    static String PASS = "root";
     static String QUERY = "SELECT * FROM Usuario";
 
     //Iterador para el numero de factura
@@ -147,10 +145,77 @@ public class CajeroMenu {
             @Override
             public void actionPerformed(ActionEvent e) {
                 imprimirFactura();
+                DefaultTableModel totalModel = (DefaultTableModel) Total.getModel();
+                String subtotalStr = totalModel.getValueAt(0, 1).toString();
+                String ivaStr = totalModel.getValueAt(1, 1).toString();
+                String totalStr = totalModel.getValueAt(2, 1).toString();
 
+                BigDecimal subtotal = new BigDecimal(subtotalStr);
+                BigDecimal iva = new BigDecimal(ivaStr);
+                BigDecimal total = new BigDecimal(totalStr);
+
+                int idNuevaFacturaGenerada = insertarFacturaEnDB(subtotal, iva, total, nomCli.getText(), idCli.getText(), dirCli.getText());
+
+                // Insertar los detalles de venta utilizando idNuevaFacturaGenerada
+                DefaultTableModel detalleModel = (DefaultTableModel) Factura.getModel();
+                for (int i = 0; i < detalleModel.getRowCount(); i++) {
+                    int idProducto = Integer.parseInt(detalleModel.getValueAt(i, 0).toString());
+                    int cantidad = Integer.parseInt(detalleModel.getValueAt(i, 1).toString());
+                    insertarDetalleVentaEnDB(idNuevaFacturaGenerada, idProducto, cantidad);
+                }
             }
         });
+
     }
+    public static void setIdCajeroActual(int idCajero) {
+        idCajeroActual = idCajero;
+    }
+    private int insertarFacturaEnDB(BigDecimal subtotal, BigDecimal iva, BigDecimal total, String nombreCliente, String cedulaCliente, String direccionCliente) {
+        int numeroNotaVenta = -1;
+        try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)) {
+            String sql = "INSERT INTO NotaDeVenta (fecha, subtotal, iva, total, idUsuario, nombreCliente, cedulaCliente, direccionCliente) " +
+                    "VALUES (CURRENT_DATE, ?, ?, ?, ?, ?, ?, ?)";
+            try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+                statement.setBigDecimal(1, subtotal);
+                statement.setBigDecimal(2, iva);
+                statement.setBigDecimal(3, total);
+                statement.setInt(4, idCajeroActual);
+                statement.setString(5, nombreCliente);
+                statement.setString(6, cedulaCliente);
+                statement.setString(7, direccionCliente);
+                statement.executeUpdate();
+
+                ResultSet generatedKeys = statement.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    numeroNotaVenta = generatedKeys.getInt(1); // Obtener el número de nota de venta generado
+                }
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return numeroNotaVenta;
+    }
+
+    private void insertarDetalleVentaEnDB(int idNotaVenta, int idProducto, int cantidad) {
+        try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)) {
+            String sql = "INSERT INTO DetalleVenta (idTransaccion, idProducto, cantidad) VALUES (?, ?, ?)";
+            try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+                statement.setInt(1, idNotaVenta);
+                statement.setInt(2, idProducto);
+                statement.setInt(3, cantidad);
+                statement.executeUpdate();
+                ResultSet generatedKeys = statement.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    int idDetalleVentaGenerado = generatedKeys.getInt(1); // Obtener el idDetalleVenta generado
+                    System.out.println("IdDetalleVenta generado: " + idDetalleVentaGenerado);
+                }
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+
     private void imprimirFactura() {
         Document document = new Document();
         String nombreArchivoPDF = "Nota de Venta " + numeroFactura + ".pdf"; // Generar el nombre del archivo con el número de factura
@@ -279,9 +344,9 @@ public class CajeroMenu {
         BigDecimal total = subtotal.add(iva);
 
         DecimalFormat formatoDecimal = new DecimalFormat("#.00"); // Formato para que sea de dos decimales
-        String formatoSubtotal = formatoDecimal.format(subtotal);
-        String formatoIva = formatoDecimal.format(iva);
-        String formatoTotal = formatoDecimal.format(total);
+        String formatoSubtotal = formatoDecimal.format(subtotal).replace(",", "."); // Reemplaza la coma por punto
+        String formatoIva = formatoDecimal.format(iva).replace(",", "."); // Reemplaza la coma por punto
+        String formatoTotal = formatoDecimal.format(total).replace(",", ".");
 
         totalModel.setValueAt(formatoSubtotal, 0, 1); // Actualizar el valor del Subtotal en la tabla
         totalModel.setValueAt(formatoIva, 1, 1);       // Actualizar el valor del IVA en la tabla
