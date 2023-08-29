@@ -52,9 +52,10 @@ public class Productos {
             public void actionPerformed(ActionEvent e) {
                 if(diferente(Integer.parseInt(idProducto.getText()))==false){
                     agregarProducto(Integer.parseInt(idProducto.getText()),nombreProducto.getText(),descripcionProducto.getText(),Integer.parseInt(stock.getText()),Float.parseFloat(precio.getText()));
+                    JOptionPane.showMessageDialog(null,"Producto agregado");
                 }
                 else {
-                    idProducto.setText("Ese id ya lo usa otro producto");
+                    JOptionPane.showMessageDialog(null,"Ese id ya lo usa otro producto");
                 }
             }
         });
@@ -63,6 +64,7 @@ public class Productos {
             @Override
             public void actionPerformed(ActionEvent e) {
                 actualizarProducto(Integer.parseInt(idProducto.getText()),nombreProducto.getText(),descripcionProducto.getText(),Integer.parseInt(stock.getText()),Float.parseFloat(precio.getText()));
+                JOptionPane.showMessageDialog(null,"Producto actualizado");
             }
         });
 
@@ -70,6 +72,7 @@ public class Productos {
             @Override
             public void actionPerformed(ActionEvent e) {
                 eliminarProducto(Integer.parseInt(idProducto.getText()));
+                JOptionPane.showMessageDialog(null,"Producto eliminado");
             }
         });
         limpiarButton.addActionListener(new ActionListener() {
@@ -149,11 +152,13 @@ public class Productos {
         return esDiferente;}
 
     public void limpiar(){
-        idProducto.setText("");
-        nombreProducto.setText("");
-        descripcionProducto.setText("");
-        stock.setText("");
-        precio.setText("");
+        JFrame frame = new JFrame("Productos");
+        frame.setContentPane(new Productos().Productos);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        closeProductosFrame();
+        frame.setSize(1000, 450);
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
     }
 
     public void mostrarProductos(){
