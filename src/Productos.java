@@ -175,7 +175,6 @@ public class Productos {
 
         //arreglo que almnacena datos
         String [] informacion=new String[5];//especifico el numero de columnas
-
         try{
             Connection conn = DriverManager.getConnection(DB_URL,USER,PASS);
             Statement stmt= conn.createStatement();
