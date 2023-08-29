@@ -23,7 +23,7 @@ public class Cajeros {
 
     static final String DB_URL="jdbc:mysql://localhost/Medical";
     static final String USER="root";
-    static final String PASS="root";
+    static final String PASS="poo123";
 
     //la tabla usuarios contiene cajeros y administradores, por ello especifico que tipo de usuario deseo visualizar en la tabla
     static final String QUERY="Select * From Usuario WHERE tipoUsuario = 'cajero'";
@@ -72,6 +72,8 @@ public class Cajeros {
 
                 //paso parametros al metodo
                 Ingresar(idx, nomx, apex, rolx, contrax, suelx, fingrx);
+                //despliege de la lista
+                Mostrar();
             }
         });
         eliminarUsuarioButton.addActionListener(new ActionListener() {
@@ -79,6 +81,8 @@ public class Cajeros {
             public void actionPerformed(ActionEvent e) {
                 idx = id.getText();
                 Eliminar(idx);
+                //despliege de la lista
+                Mostrar();
             }
         });
         actualizarInformaciónButton.addActionListener(new ActionListener() {
@@ -93,6 +97,8 @@ public class Cajeros {
                 fingrx = fIngreso.getText().trim();
 
                 Actualizar(idx, nomx, apex, rolx, contrax, suelx, fingrx);
+                //despliege de la lista
+                Mostrar();
             }
         });
         buscarButton.addActionListener(new ActionListener() {
