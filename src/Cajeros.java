@@ -21,9 +21,9 @@ public class Cajeros {
     private JButton eliminarUsuarioButton;
     private JButton actualizarInformaciónButton;
 
-    static final String DB_URL="jdbc:mysql://localhost/Medical";
-    static final String USER="root";
-    static final String PASS="root";
+    static String DB_URL = "jdbc:mysql://localhost/MEDICAL";
+    static String USER = "root";
+    static String PASS = "root_bas3";
 
     //la tabla usuarios contiene cajeros y administradores, por ello especifico que tipo de usuario deseo visualizar en la tabla
     static final String QUERY="Select * From Usuario WHERE tipoUsuario = 'cajero'";

@@ -1,11 +1,24 @@
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.PdfFormField;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.pdf.PdfAction;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import java.io.FileOutputStream;
+import java.io.Writer;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.text.DecimalFormat;
+import java.util.ArrayList; // Importar la clase ArrayList
+import java.util.List; // Importar la interfaz List
+
 
 public class CajeroMenu {
 
@@ -27,14 +40,20 @@ public class CajeroMenu {
     private JTextField idCli;
     private JTextField dirCli;
     private JTable Total;
+    private JButton imprimirFac;
 
     // Configuración de la conexión a la base de datos
-    static String DB_URL = "jdbc:mysql://localhost/medical";
+    static String DB_URL = "jdbc:mysql://localhost/MEDICAL";
     static String USER = "root";
-    static String PASS = "root";
+    static String PASS = "root_bas3";
     static String QUERY = "SELECT * FROM Usuario";
 
+    //Iterador para el numero de factura
+    private int numeroFactura = 1; // Inicializar el contador de factura
+    private List nombresArchivosPDF = new ArrayList<>(); // Para almacenar los nombres de los archivos PDF
+
     public CajeroMenu() {
+
         cerrarBt.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -74,9 +93,6 @@ public class CajeroMenu {
         rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
 
         Total.getColumnModel().getColumn(1).setCellRenderer(rightRenderer);
-
-
-
 
         Factura.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         // Botón del buscar
@@ -122,7 +138,71 @@ public class CajeroMenu {
                 }
             }
         });
+        imprimirFac.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                imprimirFactura();
+
+            }
+        });
     }
+    private void imprimirFactura() {
+        Document document = new Document();
+        try {
+            PdfWriter.getInstance(document, new FileOutputStream("Factura" + numeroFactura + ".pdf"));
+            document.open();
+            /*Informacion impresa
+            JPanel infoAdicionalPanel = new JPanel();
+            infoAdicionalPanel.setBorder(BorderFactory.createTitledBorder("Información Adicional"));*/
+
+
+            // Información de la factura
+            document.add(new Paragraph("Factura Nº: " + numeroFactura ));
+            document.add(new Paragraph("Fecha: " + new java.util.Date()+"\n"));
+            document.add(new Paragraph("Cliente: " + nomCli.getText()+"\n"));
+            document.add(new Paragraph("Direccion: " + dirCli.getText()+"\n\n"));
+
+            // Detalles de los productos en la factura
+            DefaultTableModel detalleModel = (DefaultTableModel) Factura.getModel();
+            PdfPTable table = new PdfPTable(5); // 5 columnas para: Código, Cantidad, Descripción, Valor Unitario, Valor Total
+
+            for (int i = 0; i < detalleModel.getRowCount(); i++) {
+                String codigo = detalleModel.getValueAt(i, 0).toString();
+                String cantidad = detalleModel.getValueAt(i, 1).toString();
+                String descripcion = detalleModel.getValueAt(i, 2).toString();
+                String valorUnitario = detalleModel.getValueAt(i, 3).toString();
+                String valorTotal = detalleModel.getValueAt(i, 4).toString();
+
+                table.addCell(codigo);
+                table.addCell(cantidad);
+                table.addCell(descripcion);
+                table.addCell(valorUnitario);
+                table.addCell(valorTotal);
+            }
+
+            document.add(table);
+
+            // Resumen del total
+            DefaultTableModel totalModel = (DefaultTableModel) Total.getModel();
+            Paragraph subtotal = new Paragraph("Subtotal: " + totalModel.getValueAt(0, 1));
+            subtotal.setAlignment(Element.ALIGN_RIGHT);
+            document.add(subtotal);
+
+            Paragraph iva = new Paragraph("IVA (12%): " + totalModel.getValueAt(1, 1));
+            iva.setAlignment(Element.ALIGN_RIGHT);
+            document.add(iva);
+
+            Paragraph total = new Paragraph("Total: " + totalModel.getValueAt(2, 1));
+            total.setAlignment(Element.ALIGN_RIGHT);
+            document.add(total);
+
+            document.close();
+            System.out.println("Factura generada exitosamente.");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
     private void closeCajeroMenuFrame() {
         JFrame loginFrame = (JFrame) SwingUtilities.getWindowAncestor(CajeroMenu);
         loginFrame.dispose();

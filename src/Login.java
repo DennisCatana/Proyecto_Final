@@ -14,9 +14,9 @@ public class Login {
     private String seleccionar;
 
     // Configuración de la conexión a la base de datos
-    static String DB_URL = "jdbc:mysql://localhost/medical";
+    static String DB_URL = "jdbc:mysql://localhost/MEDICAL";
     static String USER = "root";
-    static String PASS = "poo123";
+    static String PASS = "root_bas3";
     static String QUERY = "SELECT * FROM Usuario";
     static String veriusu;
     static String vericontra;
