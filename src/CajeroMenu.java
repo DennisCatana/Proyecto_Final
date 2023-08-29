@@ -50,7 +50,8 @@ public class CajeroMenu {
 
     //Iterador para el numero de factura
     private int numeroFactura = 1; // Inicializar el contador de factura
-    private List nombresArchivosPDF = new ArrayList<>(); // Para almacenar los nombres de los archivos PDF
+    private List<String> nombresArchivosPDF = new ArrayList<>(); // Para almacenar los nombres de los archivos PDF
+
 
     public CajeroMenu() {
 
@@ -148,16 +149,13 @@ public class CajeroMenu {
     }
     private void imprimirFactura() {
         Document document = new Document();
+        String nombreArchivoPDF = "Nota de Venta " + numeroFactura + ".pdf"; // Generar el nombre del archivo con el número de factura
         try {
-            PdfWriter.getInstance(document, new FileOutputStream("Factura" + numeroFactura + ".pdf"));
+            PdfWriter.getInstance(document, new FileOutputStream(nombreArchivoPDF));
             document.open();
-            /*Informacion impresa
-            JPanel infoAdicionalPanel = new JPanel();
-            infoAdicionalPanel.setBorder(BorderFactory.createTitledBorder("Información Adicional"));*/
-
 
             // Información de la factura
-            document.add(new Paragraph("Factura Nº: " + numeroFactura ));
+            document.add(new Paragraph("Nota de Venta Nº " + numeroFactura ));
             document.add(new Paragraph("Fecha: " + new java.util.Date()+"\n"));
             document.add(new Paragraph("Cliente: " + nomCli.getText()+"\n"));
             document.add(new Paragraph("Direccion: " + dirCli.getText()+"\n\n"));
@@ -179,7 +177,6 @@ public class CajeroMenu {
                 table.addCell(valorUnitario);
                 table.addCell(valorTotal);
             }
-
             document.add(table);
 
             // Resumen del total
@@ -197,7 +194,9 @@ public class CajeroMenu {
             document.add(total);
 
             document.close();
-            System.out.println("Factura generada exitosamente.");
+            JOptionPane.showMessageDialog(null, "Nota de venta generada exitosamente", "Mensaje", JOptionPane.INFORMATION_MESSAGE);
+            nombresArchivosPDF.add(nombreArchivoPDF); // Agregar el nombre del archivo a la lista
+            numeroFactura++; // Incrementar el número de factura
         } catch (Exception ex) {
             ex.printStackTrace();
         }
