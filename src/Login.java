@@ -95,7 +95,7 @@ public class Login {
     }
 
     // Método para cerrar el JFrame de inicio de sesión
-    private void closeLoginFrame() {
+    void closeLoginFrame() {
         JFrame loginFrame = (JFrame) SwingUtilities.getWindowAncestor(Login);
         loginFrame.dispose();}
 
