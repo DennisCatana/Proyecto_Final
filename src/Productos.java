@@ -42,8 +42,8 @@ public class Productos {
         buscarProductoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //buscarProducto();
                 mostrarProductos();
+                //buscarProducto();
             }
         });
 
@@ -130,7 +130,7 @@ public class Productos {
 
     public void eliminarProducto(int id){
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
-            String eliminar = "UPDATE Producto SET nombreProducto = NULL, descripcionProducto = NULL, stock = NULL, precio = NULL WHERE idProducto = ?";
+            String eliminar = "Delete From producto where idProducto  = ?";
             PreparedStatement stmt = conn.prepareStatement(eliminar);
             stmt.setInt(1, id);
             stmt.executeUpdate();}
