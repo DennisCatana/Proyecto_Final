@@ -1,22 +1,17 @@
 import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.Image;
-
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
+import com.itextpdf.text.pdf.*;
+import java.awt.event.*;
 import java.io.FileOutputStream;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.text.DecimalFormat;
-import java.util.ArrayList; // Importar la clase ArrayList
-import java.util.List; // Importar la interfaz List
-
-
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import javax.swing.*;
+import javax.swing.table.*;
 public class CajeroMenu {
 
     JPanel CajeroMenu;
@@ -47,7 +42,7 @@ public class CajeroMenu {
     // Configuración de la conexión a la base de datos
     static String DB_URL = "jdbc:mysql://localhost/MEDICAL";
     static String USER = "root";
-    static String PASS = "root";
+    static String PASS = "root_bas3";
     static String QUERY = "SELECT * FROM Usuario";
 
     //Iterador para el numero de factura
@@ -225,37 +220,48 @@ public class CajeroMenu {
 
             //Imagen de cabecera
             Image header = Image.getInstance("src/images/logo.png");
-            header.scaleAbsolute(50,50);
-            header.setAlignment(Chunk.ALIGN_RIGHT);
+            header.scaleAbsolute(100,90);
+            header.setAlignment(Chunk.ALIGN_CENTER);
             document.add(header);
+
             //Cabecera de factura
+            //Centra la cabecera
+            Paragraph centro = new Paragraph();
+            centro.setAlignment(Element.ALIGN_CENTER);
             document.add(new Paragraph( title.getText()));
             document.add(new Paragraph( adress.getText()));
             document.add(new Paragraph( sucursal.getText()));
-            document.add(new Paragraph( ruc.getText()+"                   "+"Nota de Venta Nº " + numeroFactura+"\n\n" ));
+            document.add(new Paragraph( ruc.getText()+"                   "+"Nota de Venta Nº " + numeroFactura+"\n"));
+            document.add(new Paragraph("----------------------------------------------------------------------------------------------------------------------------------\n"));
+            document.add(centro);
 
             // Información de la factura
-            document.add(new Paragraph("Fecha: " + new java.util.Date()+"\n"));
+            //Confijuracion para la fecha en español
+            LocalDateTime ahora = LocalDateTime.now();
+            DateTimeFormatter formateador = DateTimeFormatter.ofPattern("dd-MM-yyyy", new Locale("es", "ES"));
+            String fechaHoraFormateada = ahora.format(formateador);
+            document.add(new Paragraph("Fecha: " +  fechaHoraFormateada+"\n"));
             document.add(new Paragraph("Cliente: " + nomCli.getText()+"\n"));
-            document.add(new Paragraph("Dirección: " + dirCli.getText()+"\n\n"));
+            document.add(new Paragraph("Dirección: " + dirCli.getText()+"\n"));
+            document.add(new Paragraph("----------------------------------------------------------------------------------------------------------------------------------\n"+"\n"));
+
 
             // Detalles de los productos en la factura
             DefaultTableModel detalleModel = (DefaultTableModel) Factura.getModel();
             PdfPTable table = new PdfPTable(5); // 5 columnas para: Código, Cantidad, Descripción, Valor Unitario, Valor Total
 
-            for (int i = 0; i < detalleModel.getRowCount(); i++) {
-                String codigo = detalleModel.getValueAt(i, 0).toString();
-                String cantidad = detalleModel.getValueAt(i, 1).toString();
-                String descripcion = detalleModel.getValueAt(i, 2).toString();
-                String valorUnitario = detalleModel.getValueAt(i, 3).toString();
-                String valorTotal = detalleModel.getValueAt(i, 4).toString();
-
-                table.addCell(codigo);
-                table.addCell(cantidad);
-                table.addCell(descripcion);
-                table.addCell(valorUnitario);
-                table.addCell(valorTotal);
+            // Agregar encabezados de columna a la tabla PDF
+            for (int i = 0; i < detalleModel.getColumnCount(); i++) {
+                PdfPCell cell = new PdfPCell(new Phrase(detalleModel.getColumnName(i)));
+                table.addCell(cell);
             }
+            // Agregar datos de la tabla al PDF
+            for (int rows = 0; rows < detalleModel.getRowCount(); rows++) {
+                for (int cols = 0; cols < detalleModel.getColumnCount(); cols++) {
+                    table.addCell(detalleModel.getValueAt(rows, cols).toString());
+                }
+            }
+            // Agregar la tabla al documento PDF
             document.add(table);
 
             // Resumen del total
