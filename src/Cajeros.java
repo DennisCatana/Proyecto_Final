@@ -38,20 +38,20 @@ public class Cajeros {
     String contrax;
     String fingrx;
     public Cajeros(){
-    regresarButton.addActionListener(new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            JFrame frame;
-            frame = new JFrame("AdminMenu");
-            frame.setContentPane(new AdminMenu().AdminMenu);
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            closeCajerosFrame();
-            frame.pack();
-            frame.setSize(1000, 500);
-            frame.setLocationRelativeTo(null);
-            frame.setVisible(true);
-        }
-    });
+        regresarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame frame;
+                frame = new JFrame("AdminMenu");
+                frame.setContentPane(new AdminMenu().AdminMenu);
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                closeCajerosFrame();
+                frame.pack();
+                frame.setSize(1000, 500);
+                frame.setLocationRelativeTo(null);
+                frame.setVisible(true);
+            }
+        });
         mostarCajerosButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -73,6 +73,7 @@ public class Cajeros {
                 //paso parametros al metodo
                 Ingresar(idx, nomx, apex, rolx, contrax, suelx, fingrx);
                 Mostrar();
+                LimpiarCampos();
             }
         });
         eliminarUsuarioButton.addActionListener(new ActionListener() {
@@ -81,6 +82,7 @@ public class Cajeros {
                 idx = id.getText();
                 Eliminar(idx);
                 Mostrar();
+                LimpiarCampos();
             }
         });
         actualizarInformaciónButton.addActionListener(new ActionListener() {
@@ -96,6 +98,7 @@ public class Cajeros {
 
                 Actualizar(idx, nomx, apex, rolx, contrax, suelx, fingrx);
                 Mostrar();
+                LimpiarCampos();
             }
         });
         buscarButton.addActionListener(new ActionListener() {
@@ -126,7 +129,7 @@ public class Cajeros {
         //genera columnas de la tabla
         DefaultTableModel model = new DefaultTableModel();
         model.addColumn("idUsuario");
-        model.addColumn("nombre");
+        model.addColumn("Nombre");
         model.addColumn("Apellido");
         model.addColumn("Rol");//columna tipoUsuario
         model.addColumn("Contraseña");
@@ -164,24 +167,37 @@ public class Cajeros {
     }
 
     public void Ingresar(String idU, String nom, String ape, String trol, String cont, String suel, String ingre){
-        //es necesario definir TODOS los registros que se encuentran designados en la tabla
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-             PreparedStatement pstmt = conn.prepareStatement("INSERT INTO Usuario (idUsuario, nombre, apellido, tipoUsuario, contraseña, salario, fechaContratacion) VALUES (?, ?, ?, ?, ?, ?, ?)")) {
 
-            //parametros que se contemplan en la tabla generada en mysql
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
+            // Verificar si el ID ya existe
+            PreparedStatement verificar = conn.prepareStatement("SELECT COUNT(*) FROM Usuario WHERE idUsuario = ?");
+            //al ser id tipo int, realizo la conversion
+            verificar.setInt(1, Integer.parseInt(idU));
+            ResultSet resBusqueda = verificar.executeQuery();
 
-                //Conversiones de tipo String hacia el tipo de tado establecido en la tabla
-            pstmt.setInt(1, Integer.parseInt(idU));
-            pstmt.setString(2, nom);
-            pstmt.setString(3, ape);
-            pstmt.setString(4, trol);
-            pstmt.setString(5, cont);
-            pstmt.setDouble(6, Double.parseDouble(suel));
-            pstmt.setString(7, ingre);
-            pstmt.executeUpdate();
+            if (resBusqueda.next() && resBusqueda.getInt(1) > 0) {
+                JOptionPane.showMessageDialog(null, "El ID de usuario ya existe");
+                return;
+            }
 
-            JOptionPane.showMessageDialog(null, "Informacion ingresada correctamente");
-        } catch (Exception e) {
+            // Si el ID no está en uso, realizar la inserción
+            //es necesario definir TODOS los registros que se encuentran designados en la tabla
+            PreparedStatement insertStmt = conn.prepareStatement("INSERT INTO Usuario (idUsuario, nombre, apellido, tipoUsuario, contraseña, salario, fechaContratacion) VALUES (?, ?, ?, ?, ?, ?, ?)");
+
+            //Conversiones de tipo String hacia el tipo de tado establecido en la tabla
+            insertStmt.setInt(1, Integer.parseInt(idU));
+            //pstmt.setString(1, idU);
+            insertStmt.setString(2, nom);
+            insertStmt.setString(3, ape);
+            insertStmt.setString(4, trol);
+            insertStmt.setString(5, cont);
+            insertStmt.setDouble(6, Double.parseDouble(suel));
+            insertStmt.setString(7, ingre);
+            insertStmt.executeUpdate();
+
+            JOptionPane.showMessageDialog(null, "Información ingresada correctamente");
+            Mostrar();
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -209,7 +225,7 @@ public class Cajeros {
     public void Actualizar(String idU, String nom, String ape, String trol, String cont, String suel, String ingre){
 
         //genenero una busqueda interna por id para seleccionar el usuario y asi editar la informacion con ese id
-            //se puede acualizar la infomacion de cualquier campo menos el Id
+        //se puede acualizar la infomacion de cualquier campo menos el Id
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
              PreparedStatement pstmt = conn.prepareStatement("UPDATE Usuario SET nombre = ?, apellido = ?, tipoUsuario = ?, contraseña = ?, salario = ?, fechaContratacion = ? WHERE idUsuario = ?")) {
 
@@ -232,9 +248,12 @@ public class Cajeros {
             e.printStackTrace();
         }
 
+
+
     }
 
     public void Buscar(String idU) {
+        //tabla
         DefaultTableModel model = new DefaultTableModel();
         model.addColumn("idUsuario");
         model.addColumn("nombre");
@@ -260,6 +279,15 @@ public class Cajeros {
                 informacion[5] = rs.getString(6);
                 informacion[6] = rs.getString(7);
                 model.addRow(informacion);
+
+                //llenar jtextfield
+                //se genera la busqueda mediante el id, ya no necesario llamar a esa informacion
+                nombre.setText(informacion[1]);
+                apellido.setText(informacion[2]);
+                rol.setText(informacion[3]);
+                contra.setText(informacion[4]);
+                salario.setText(informacion[5]);
+                fIngreso.setText(informacion[6]);
             } else {
                 JOptionPane.showMessageDialog(null, "No se encontró un registro con ese ID");
             }
@@ -267,4 +295,16 @@ public class Cajeros {
             e.printStackTrace();
         }
     }
+
+    private void LimpiarCampos() {
+        id.setText("");
+        nombre.setText("");
+        apellido.setText("");
+        rol.setText("");
+        contra.setText("");
+        salario.setText("");
+        fIngreso.setText("");
+    }
+
+
 }
