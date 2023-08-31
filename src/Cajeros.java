@@ -23,7 +23,7 @@ public class Cajeros {
 
     static final String DB_URL="jdbc:mysql://localhost/Medical";
     static final String USER="root";
-    static final String PASS="poo123";
+    static final String PASS="root";
 
     //la tabla usuarios contiene cajeros y administradores, por ello especifico que tipo de usuario deseo visualizar en la tabla
     static final String QUERY="Select * From Usuario WHERE tipoUsuario = 'cajero'";
@@ -73,7 +73,6 @@ public class Cajeros {
                 //paso parametros al metodo
                 Ingresar(idx, nomx, apex, rolx, contrax, suelx, fingrx);
                 Mostrar();
-                limpiarCampos();
             }
         });
         eliminarUsuarioButton.addActionListener(new ActionListener() {
@@ -82,7 +81,6 @@ public class Cajeros {
                 idx = id.getText();
                 Eliminar(idx);
                 Mostrar();
-                limpiarCampos();
             }
         });
         actualizarInformaciónButton.addActionListener(new ActionListener() {
@@ -98,7 +96,6 @@ public class Cajeros {
 
                 Actualizar(idx, nomx, apex, rolx, contrax, suelx, fingrx);
                 Mostrar();
-                limpiarCampos();
             }
         });
         buscarButton.addActionListener(new ActionListener() {
@@ -167,37 +164,24 @@ public class Cajeros {
     }
 
     public void Ingresar(String idU, String nom, String ape, String trol, String cont, String suel, String ingre){
+        //es necesario definir TODOS los registros que se encuentran designados en la tabla
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+             PreparedStatement pstmt = conn.prepareStatement("INSERT INTO Usuario (idUsuario, nombre, apellido, tipoUsuario, contraseña, salario, fechaContratacion) VALUES (?, ?, ?, ?, ?, ?, ?)")) {
 
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
-            // Verificar si el ID ya existe
-            PreparedStatement verificar = conn.prepareStatement("SELECT COUNT(*) FROM Usuario WHERE idUsuario = ?");
-            //al ser id tipo int, realizo la conversion
-            verificar.setInt(1, Integer.parseInt(idU));
-            ResultSet resBusqueda = verificar.executeQuery();
-
-            if (resBusqueda.next() && resBusqueda.getInt(1) > 0) {
-                JOptionPane.showMessageDialog(null, "El ID de usuario ya existe");
-                return;
-            }
-
-            // Si el ID no está en uso, realizar la inserción
-                //es necesario definir TODOS los registros que se encuentran designados en la tabla
-            PreparedStatement insertStmt = conn.prepareStatement("INSERT INTO Usuario (idUsuario, nombre, apellido, tipoUsuario, contraseña, salario, fechaContratacion) VALUES (?, ?, ?, ?, ?, ?, ?)");
+            //parametros que se contemplan en la tabla generada en mysql
 
                 //Conversiones de tipo String hacia el tipo de tado establecido en la tabla
-            insertStmt.setInt(1, Integer.parseInt(idU));
-            //pstmt.setString(1, idU);
-            insertStmt.setString(2, nom);
-            insertStmt.setString(3, ape);
-            insertStmt.setString(4, trol);
-            insertStmt.setString(5, cont);
-            insertStmt.setDouble(6, Double.parseDouble(suel));
-            insertStmt.setString(7, ingre);
-            insertStmt.executeUpdate();
+            pstmt.setInt(1, Integer.parseInt(idU));
+            pstmt.setString(2, nom);
+            pstmt.setString(3, ape);
+            pstmt.setString(4, trol);
+            pstmt.setString(5, cont);
+            pstmt.setDouble(6, Double.parseDouble(suel));
+            pstmt.setString(7, ingre);
+            pstmt.executeUpdate();
 
-            JOptionPane.showMessageDialog(null, "Información ingresada correctamente");
-            Mostrar();
-        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Informacion ingresada correctamente");
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -248,12 +232,9 @@ public class Cajeros {
             e.printStackTrace();
         }
 
-
-
     }
 
     public void Buscar(String idU) {
-        //tabla
         DefaultTableModel model = new DefaultTableModel();
         model.addColumn("idUsuario");
         model.addColumn("nombre");
@@ -279,14 +260,6 @@ public class Cajeros {
                 informacion[5] = rs.getString(6);
                 informacion[6] = rs.getString(7);
                 model.addRow(informacion);
-
-                //llenar jtextfield
-                nombre.setText(informacion[1]);
-                apellido.setText(informacion[2]);
-                rol.setText(informacion[3]);
-                contra.setText(informacion[4]);
-                salario.setText(informacion[5]);
-                fIngreso.setText(informacion[6]);
             } else {
                 JOptionPane.showMessageDialog(null, "No se encontró un registro con ese ID");
             }
@@ -294,16 +267,4 @@ public class Cajeros {
             e.printStackTrace();
         }
     }
-
-    private void limpiarCampos() {
-        id.setText("");
-        nombre.setText("");
-        apellido.setText("");
-        rol.setText("");
-        contra.setText("");
-        salario.setText("");
-        fIngreso.setText("");
-    }
-
-
 }
