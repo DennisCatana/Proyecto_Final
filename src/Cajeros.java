@@ -23,7 +23,7 @@ public class Cajeros {
 
     static final String DB_URL="jdbc:mysql://localhost/Medical";
     static final String USER="root";
-    static final String PASS="root";
+    static final String PASS="poo123";
 
     //la tabla usuarios contiene cajeros y administradores, por ello especifico que tipo de usuario deseo visualizar en la tabla
     static final String QUERY="Select * From Usuario WHERE tipoUsuario = 'cajero'";
@@ -172,6 +172,7 @@ public class Cajeros {
 
                 //Conversiones de tipo String hacia el tipo de tado establecido en la tabla
             pstmt.setInt(1, Integer.parseInt(idU));
+            //pstmt.setString(1, idU);
             pstmt.setString(2, nom);
             pstmt.setString(3, ape);
             pstmt.setString(4, trol);
