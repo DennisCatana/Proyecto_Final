@@ -1,5 +1,4 @@
 import javax.swing.*;
-import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -130,7 +129,7 @@ public class Cajeros {
         //genera columnas de la tabla
         DefaultTableModel model = new DefaultTableModel();
         model.addColumn("idUsuario");
-        model.addColumn("nombre");
+        model.addColumn("Nombre");
         model.addColumn("Apellido");
         model.addColumn("Rol");//columna tipoUsuario
         model.addColumn("Contraseña");
