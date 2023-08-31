@@ -176,7 +176,7 @@ public class Cajeros {
             ResultSet resBusqueda = verificar.executeQuery();
 
             if (resBusqueda.next() && resBusqueda.getInt(1) > 0) {
-                JOptionPane.showMessageDialog(null, "El ID de usuario ya existe para el usuario");
+                JOptionPane.showMessageDialog(null, "El ID de usuario ya existe");
                 return;
             }
 
