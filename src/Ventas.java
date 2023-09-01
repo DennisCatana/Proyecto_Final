@@ -8,20 +8,23 @@ public class Ventas {
      JPanel Ventas;
     private JButton regresarButton;
     private JTable ventas;
+    private JButton buscarButton;
+    private JTextField buscarCajero;
+    private JTextField prueba;
     static final String DB_URL="jdbc:mysql://localhost/Medical";
     static final String USER="root";
-    static final String PASS="root";
+    static final String PASS="root_bas3";
     static final String QUERY="Select * From NotaDeVenta";
 
     public Ventas() {
         //genera columnas de la tabla
         DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("idUsuario");
         model.addColumn("idNotaVenta");
         model.addColumn("fecha");
-        model.addColumn("Total");
         model.addColumn("subtotal");
         model.addColumn("iva");
-        model.addColumn("idUsuario");
+        model.addColumn("Total");
         model.addColumn("nombreCliente");
         model.addColumn("cedulaCliente");
         model.addColumn("direccionCliente");
@@ -39,12 +42,12 @@ public class Ventas {
 
             while (rs.next()){
                 //detallo la posicion de dato almacenado en arreglo, con la columna en la quebe ir
-                infoVentas[0]=rs.getString(1);//num de columna
-                infoVentas[1]=rs.getString(2);
-                infoVentas[2]=rs.getString(3);
+                infoVentas[0]=rs.getString(6);//num de columna
+                infoVentas[1]=rs.getString(1);
+                infoVentas[2]=rs.getString(2);
                 infoVentas[3]=rs.getString(4);
                 infoVentas[4]=rs.getString(5);
-                infoVentas[5]=rs.getString(6);
+                infoVentas[5]=rs.getString(3);
                 infoVentas[6]=rs.getString(7);
                 infoVentas[7]=rs.getString(8);
                 infoVentas[8]=rs.getString(9);
@@ -64,14 +67,61 @@ public class Ventas {
             frame = new JFrame("AdminMenu");
             frame.setContentPane(new AdminMenu().AdminMenu);
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            closeVentasFrame();
+            //closeVentasFrame();
             frame.pack();
             frame.setSize(1000, 500);
             frame.setLocationRelativeTo(null);
             frame.setVisible(true);
         }
     });
-}
+        buscarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Buscando"+Integer.parseInt(buscarCajero.getText()));
+                buscarIdUsuario(Integer.parseInt(buscarCajero.getText()));
+            }
+        });
+    }
+
+    public void buscarIdUsuario(int id){
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("idUsuario");
+        model.addColumn("idNotaVenta");
+        model.addColumn("fecha");
+        model.addColumn("subtotal");
+        model.addColumn("iva");
+        model.addColumn("Total");
+        model.addColumn("nombreCliente");
+        model.addColumn("cedulaCliente");
+        model.addColumn("direccionCliente");
+        ventas.setModel(model);
+        String [] infoVentas=new String[9];//especifico el numero de columnas
+        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+             PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Usuario WHERE idUsuario = ?")) {
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                infoVentas[0]=rs.getString(6);//num de columna
+                infoVentas[1]=rs.getString(1);
+                infoVentas[2]=rs.getString(2);
+                infoVentas[3]=rs.getString(4);
+                infoVentas[4]=rs.getString(5);
+                infoVentas[5]=rs.getString(3);
+                infoVentas[6]=rs.getString(7);
+                infoVentas[7]=rs.getString(8);
+                infoVentas[8]=rs.getString(9);
+                model.addRow(infoVentas);
+                buscarCajero.setText(infoVentas[6]);
+                prueba.setText(infoVentas[6]);
+
+            } else {
+                JOptionPane.showMessageDialog(null, "No se encontró un registro con ese ID");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     private void closeVentasFrame() {
         JFrame loginFrame = (JFrame) SwingUtilities.getWindowAncestor(Ventas);
