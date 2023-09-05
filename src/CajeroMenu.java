@@ -162,13 +162,29 @@ public class CajeroMenu {
                     insertarDetalleVentaEnDB(idNuevaFacturaGenerada, idProducto, cantidad);
                 }
                 //setear el formulario en blanco
-                JFrame frame = new JFrame("Cajero - Menú Principal");
-                frame.setContentPane(new CajeroMenu().CajeroMenu);
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                closeLoginFrame();
-                frame.setSize(1000, 450);
-                frame.setLocationRelativeTo(null);
-                frame.setVisible(true);
+                nomCli.setText("");
+                idCli.setText(" ");
+                dirCli.setText("");
+
+                DefaultTableModel model = new DefaultTableModel(
+                        // Contenido de la Tabla
+                        new Object[][] {
+                        },
+                        // Nombrar las columnas
+                        new String[]{"Codigo","Cantidad","Descripción","Valor Unitario", "Valor Total"});
+                // Poner el modelo hecho en el Jtable
+                Factura.setModel(model);
+
+                DefaultTableModel totalModel1 = new DefaultTableModel(
+                        new Object[][] {
+                                {"Subtotal", ""},
+                                {"IVA (12%)", ""},
+                                {"Total", ""}
+                        },
+                        new String[]{"", ""}); // Las columnas no necesitan nombres
+
+                Total.setModel(totalModel1);
+
 
             }
         });
@@ -243,7 +259,7 @@ public class CajeroMenu {
             document.add(new Paragraph( title.getText()));
             document.add(new Paragraph( adress.getText()));
             document.add(new Paragraph( sucursal.getText()));
-            document.add(new Paragraph( ruc.getText()+"                   "+"Nota de Venta Nº " + numeroFactura+"\n"));
+            document.add(new Paragraph( ruc.getText()+"                   "+"Nota de Venta Nº " + numfac() +"\n"));
             document.add(new Paragraph("----------------------------------------------------------------------------------------------------------------------------------\n"));
             document.add(centro);
 
