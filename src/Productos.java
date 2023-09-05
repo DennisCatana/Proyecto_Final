@@ -20,7 +20,7 @@ public class Productos {
     private JTable visor;
     static String DB_URL = "jdbc:mysql://localhost/medical";
     static String USER = "root";
-    static String PASS = "root";
+    static String PASS = "poo123";
     static String QUERY = "SELECT * FROM producto";
 
     public Productos() {

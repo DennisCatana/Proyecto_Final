@@ -13,21 +13,21 @@ public class Ventas {
     private JTextField prueba;
     static final String DB_URL="jdbc:mysql://localhost/Medical";
     static final String USER="root";
-    static final String PASS="root_bas3";
+    static final String PASS="poo123";
     static final String QUERY="Select * From NotaDeVenta";
 
     public Ventas() {
         //genera columnas de la tabla
         DefaultTableModel model = new DefaultTableModel();
-        model.addColumn("idUsuario");
+        model.addColumn("idCajero");
         model.addColumn("idNotaVenta");
-        model.addColumn("fecha");
-        model.addColumn("subtotal");
+        model.addColumn("Fecha");
+        model.addColumn("Subtotal");
         model.addColumn("iva");
         model.addColumn("Total");
-        model.addColumn("nombreCliente");
-        model.addColumn("cedulaCliente");
-        model.addColumn("direccionCliente");
+        model.addColumn("NombreCliente");
+        model.addColumn("CedulaCliente");
+        model.addColumn("DireccionCliente");
 
         // Poner las columnas en el modelo hecho en el Jtable
         ventas.setModel(model);
@@ -85,24 +85,27 @@ public class Ventas {
 
     public void buscarIdUsuario(int id){
         DefaultTableModel model = new DefaultTableModel();
-        model.addColumn("idUsuario");
+        model.addColumn("idCajero");
         model.addColumn("idNotaVenta");
-        model.addColumn("fecha");
-        model.addColumn("subtotal");
+        model.addColumn("Fecha");
+        model.addColumn("Subtotal");
         model.addColumn("iva");
         model.addColumn("Total");
-        model.addColumn("nombreCliente");
-        model.addColumn("cedulaCliente");
-        model.addColumn("direccionCliente");
+        model.addColumn("NombreCliente");
+        model.addColumn("CedulaCliente");
+        model.addColumn("DireccionCliente");
+
         ventas.setModel(model);
         String [] infoVentas=new String[9];//especifico el numero de columnas
+
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-             PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Usuario WHERE idUsuario = ?")) {
+             PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM NotaDeVenta WHERE idUsuario = ?")) {
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
 
             if (rs.next()) {
-                infoVentas[0]=rs.getString(6);//num de columna
+                /*
+                infoVentas[0]=rs.getString(6);
                 infoVentas[1]=rs.getString(1);
                 infoVentas[2]=rs.getString(2);
                 infoVentas[3]=rs.getString(4);
@@ -110,10 +113,23 @@ public class Ventas {
                 infoVentas[5]=rs.getString(3);
                 infoVentas[6]=rs.getString(7);
                 infoVentas[7]=rs.getString(8);
-                infoVentas[8]=rs.getString(9);
+                infoVentas[8]=rs.getString(9);*/
+
+                // Accede a la columna en base al nombre
+                infoVentas[0] = rs.getString("idUsuario");
+                infoVentas[1] = rs.getString("idNotaVenta");
+                infoVentas[2] = rs.getString("fecha");
+                infoVentas[3] = rs.getString("subtotal");
+                infoVentas[4] = rs.getString("iva");
+                infoVentas[5] = rs.getString("total");
+                infoVentas[6] = rs.getString("nombreCliente");
+                infoVentas[7] = rs.getString("cedulaCliente");
+                infoVentas[8] = rs.getString("direccionCliente");
+
                 model.addRow(infoVentas);
-                buscarCajero.setText(infoVentas[6]);
-                prueba.setText(infoVentas[6]);
+                //buscarCajero.setText(infoVentas[6]);
+                //prueba.setText(infoVentas[6]);
+
 
             } else {
                 JOptionPane.showMessageDialog(null, "No se encontró un registro con ese ID");
