@@ -38,6 +38,7 @@ public class CajeroMenu {
     private JLabel title;
     protected static int idCajeroActual;
     private int numeroNotaVenta = -1;
+    private int fac;
 
     // Configuración de la conexión a la base de datos
     static String DB_URL = "jdbc:mysql://localhost/MEDICAL";
@@ -168,6 +169,7 @@ public class CajeroMenu {
                 frame.setSize(1000, 450);
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
+
             }
         });
 
@@ -223,7 +225,7 @@ public class CajeroMenu {
 
     private void imprimirFactura() {
         Document document = new Document();
-        String nombreArchivoPDF = "Nota de Venta " + numeroFactura + ".pdf"; // Generar el nombre del archivo con el número de factura
+        String nombreArchivoPDF = "Nota de Venta " + numfac() + ".pdf"; // Generar el nombre del archivo con el número de factura
         try {
             PdfWriter.getInstance(document, new FileOutputStream(nombreArchivoPDF));
             document.open();
@@ -377,6 +379,21 @@ public class CajeroMenu {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
+
+    int numfac(){
+        String busnumfac = "SELECT * FROM NotaDeVenta";
+        try(Connection conn = DriverManager.getConnection(DB_URL,USER,PASS);
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(busnumfac)){
+            while(rs.next()){
+                fac=rs.getInt("idNotaVenta");
+            }
+        }catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+        return fac+1;
+    }
+
     public void closeLoginFrame() {
         JFrame loginFrame = (JFrame) SwingUtilities.getWindowAncestor(CajeroMenu);
         loginFrame.dispose();}
