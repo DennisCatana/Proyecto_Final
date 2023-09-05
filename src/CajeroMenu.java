@@ -42,7 +42,7 @@ public class CajeroMenu {
     // Configuración de la conexión a la base de datos
     static String DB_URL = "jdbc:mysql://localhost/MEDICAL";
     static String USER = "root";
-    static String PASS = "poo123";//root_bas3
+    static String PASS = "root";
     static String QUERY = "SELECT * FROM Usuario";
 
     //Iterador para el numero de factura
@@ -120,6 +120,8 @@ public class CajeroMenu {
                 model.addRow(new Object[]{codigoProducto, cantidadSeleccionada, nombreProducto, valorUnitario, valorTotal});
 
                 calcularTotal(); // Llamar a la función para actualizar el resumen
+                busqueda.setText("");
+                cantidad.setText("");
             }
         });
 
@@ -158,6 +160,14 @@ public class CajeroMenu {
                     int cantidad = Integer.parseInt(detalleModel.getValueAt(i, 1).toString());
                     insertarDetalleVentaEnDB(idNuevaFacturaGenerada, idProducto, cantidad);
                 }
+                //setear el formulario en blanco
+                JFrame frame = new JFrame("Cajero - Menú Principal");
+                frame.setContentPane(new CajeroMenu().CajeroMenu);
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                closeLoginFrame();
+                frame.setSize(1000, 450);
+                frame.setLocationRelativeTo(null);
+                frame.setVisible(true);
             }
         });
 
@@ -367,7 +377,9 @@ public class CajeroMenu {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
-
+    public void closeLoginFrame() {
+        JFrame loginFrame = (JFrame) SwingUtilities.getWindowAncestor(CajeroMenu);
+        loginFrame.dispose();}
     private void createUIComponents() {
         // TODO: place custom component creation code here
         Factura = new JTable();

@@ -10,24 +10,24 @@ public class Ventas {
     private JTable ventas;
     private JButton buscarButton;
     private JTextField buscarCajero;
-    private JTextField prueba;
+    private JButton ventasButton;
     static final String DB_URL="jdbc:mysql://localhost/Medical";
     static final String USER="root";
-    static final String PASS="poo123";
+    static final String PASS="root";
     static final String QUERY="Select * From NotaDeVenta";
 
     public Ventas() {
         //genera columnas de la tabla
         DefaultTableModel model = new DefaultTableModel();
-        model.addColumn("idCajero");
+        model.addColumn("idUsuario");
         model.addColumn("idNotaVenta");
-        model.addColumn("Fecha");
-        model.addColumn("Subtotal");
+        model.addColumn("fecha");
+        model.addColumn("subtotal");
         model.addColumn("iva");
         model.addColumn("Total");
-        model.addColumn("NombreCliente");
-        model.addColumn("CedulaCliente");
-        model.addColumn("DireccionCliente");
+        model.addColumn("nombreCliente");
+        model.addColumn("cedulaCliente");
+        model.addColumn("direccionCliente");
 
         // Poner las columnas en el modelo hecho en el Jtable
         ventas.setModel(model);
@@ -77,64 +77,62 @@ public class Ventas {
         buscarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Buscando"+Integer.parseInt(buscarCajero.getText()));
                 buscarIdUsuario(Integer.parseInt(buscarCajero.getText()));
+            }
+        });
+        ventasButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFrame frame = new JFrame("Ventas");
+                frame.setContentPane(new Ventas().Ventas);
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                closeVentasFrame();
+                frame.setSize(1000, 450);
+                frame.setLocationRelativeTo(null);
+                frame.setVisible(true);
             }
         });
     }
 
     public void buscarIdUsuario(int id){
         DefaultTableModel model = new DefaultTableModel();
-        model.addColumn("idCajero");
+        model.addColumn("idUsuario");
         model.addColumn("idNotaVenta");
-        model.addColumn("Fecha");
-        model.addColumn("Subtotal");
+        model.addColumn("fecha");
+        model.addColumn("subtotal");
         model.addColumn("iva");
         model.addColumn("Total");
-        model.addColumn("NombreCliente");
-        model.addColumn("CedulaCliente");
-        model.addColumn("DireccionCliente");
-
+        model.addColumn("nombreCliente");
+        model.addColumn("cedulaCliente");
+        model.addColumn("direccionCliente");
         ventas.setModel(model);
         String [] infoVentas=new String[9];//especifico el numero de columnas
-
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
              PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM NotaDeVenta WHERE idUsuario = ?")) {
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
+            while(rs.next()){
+                if(rs.getInt("idUsuario")==id){
+                    infoVentas[0]=rs.getString(6);//num de columna
+                    infoVentas[1]=rs.getString(1);
+                    infoVentas[2]=rs.getString(2);
+                    infoVentas[3]=rs.getString(4);
+                    infoVentas[4]=rs.getString(5);
+                    infoVentas[5]=rs.getString(3);
+                    infoVentas[6]=rs.getString(7);
+                    infoVentas[7]=rs.getString(8);
+                    infoVentas[8]=rs.getString(9);
+                    model.addRow(infoVentas);
+                }
+                else {
+                    JOptionPane.showMessageDialog(null, "No se encontró un registro con ese ID");
 
-            if (rs.next()) {
-                /*
-                infoVentas[0]=rs.getString(6);
-                infoVentas[1]=rs.getString(1);
-                infoVentas[2]=rs.getString(2);
-                infoVentas[3]=rs.getString(4);
-                infoVentas[4]=rs.getString(5);
-                infoVentas[5]=rs.getString(3);
-                infoVentas[6]=rs.getString(7);
-                infoVentas[7]=rs.getString(8);
-                infoVentas[8]=rs.getString(9);*/
-
-                // Accede a la columna en base al nombre
-                infoVentas[0] = rs.getString("idUsuario");
-                infoVentas[1] = rs.getString("idNotaVenta");
-                infoVentas[2] = rs.getString("fecha");
-                infoVentas[3] = rs.getString("subtotal");
-                infoVentas[4] = rs.getString("iva");
-                infoVentas[5] = rs.getString("total");
-                infoVentas[6] = rs.getString("nombreCliente");
-                infoVentas[7] = rs.getString("cedulaCliente");
-                infoVentas[8] = rs.getString("direccionCliente");
-
-                model.addRow(infoVentas);
-                //buscarCajero.setText(infoVentas[6]);
-                //prueba.setText(infoVentas[6]);
-
-
-            } else {
-                JOptionPane.showMessageDialog(null, "No se encontró un registro con ese ID");
             }
-        } catch (Exception e) {
+                buscarCajero.setText("");
+
+            }
+            }
+        catch (Exception e) {
             e.printStackTrace();
         }
     }
