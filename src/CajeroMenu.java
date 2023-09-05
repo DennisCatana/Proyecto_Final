@@ -20,7 +20,7 @@ public class CajeroMenu {
     private JTable Factura;
     private JTextField cantidad;
     private JButton seleccionarButton;
-    private JLabel nomProd;
+    private JTextField nomProd;
     private JTextField busqueda;
     private JButton buscarButton;
     private JButton borrarButton;

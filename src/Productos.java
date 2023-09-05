@@ -101,6 +101,7 @@ public class Productos {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
     }
     public void agregarProducto(int id, String nombre, String descripcion, int stock, double precio) {
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
