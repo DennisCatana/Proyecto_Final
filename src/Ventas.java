@@ -13,7 +13,7 @@ public class Ventas {
     private JButton ventasButton;
     static final String DB_URL="jdbc:mysql://localhost/Medical";
     static final String USER="root";
-    static final String PASS="poo123";
+    static final String PASS="root";
     static final String QUERY="Select * From NotaDeVenta";
 
     public Ventas() {
