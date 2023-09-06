@@ -176,7 +176,7 @@
         </constraints>
         <properties/>
       </component>
-      <component id="78f9d" class="javax.swing.JButton" binding="limpiarButton" default-binding="true">
+      <component id="78f9d" class="javax.swing.JButton" binding="listaButton">
         <constraints>
           <grid row="5" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
         </constraints>

@@ -16,7 +16,7 @@ public class Productos {
     private JButton actualizarProductoButton;
     private JButton eliminarProductoButton;
     private JTextField precio;
-    private JButton limpiarButton;
+    private JButton listaButton;
     private JTable visor;
     static String DB_URL = "jdbc:mysql://localhost/medical";
     static String USER = "root";
@@ -52,12 +52,14 @@ public class Productos {
                 if(diferente(Integer.parseInt(idProducto.getText()))==false){
                     agregarProducto(Integer.parseInt(idProducto.getText()),nombreProducto.getText(),descripcionProducto.getText(),Integer.parseInt(stock.getText()),Float.parseFloat(precio.getText()));
                     JOptionPane.showMessageDialog(null,"Producto agregado");
-                    limpiar();
+                    mostrarProductos();
                 }
                 else {
                     JOptionPane.showMessageDialog(null,"Ese id ya lo usa otro producto");
                 }
+                limpiar();
             }
+
         });
 
         actualizarProductoButton.addActionListener(new ActionListener() {
@@ -66,6 +68,7 @@ public class Productos {
                 actualizarProducto(Integer.parseInt(idProducto.getText()),nombreProducto.getText(),descripcionProducto.getText(),Integer.parseInt(stock.getText()),Float.parseFloat(precio.getText()));
                 JOptionPane.showMessageDialog(null,"Producto actualizado");
                 limpiar();
+                mostrarProductos();
             }
         });
 
@@ -75,9 +78,10 @@ public class Productos {
                 eliminarProducto(Integer.parseInt(idProducto.getText()));
                 JOptionPane.showMessageDialog(null,"Producto eliminado");
                 limpiar();
+                mostrarProductos();
             }
         });
-        limpiarButton.addActionListener(new ActionListener() {
+        listaButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 mostrarProductos();
@@ -86,17 +90,41 @@ public class Productos {
     }
 
     public void buscarProducto(){
+        /*
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.addColumn("IdProducto");
+        modelo.addColumn("Nombre");
+        modelo.addColumn("Descripción");
+        modelo.addColumn("Stock");
+        modelo.addColumn("Precio");
+
+        visor.setModel(modelo);
+
+        String [] informacion=new String[5];*/
+
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
             String buscar = "SELECT * FROM Producto";
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(buscar);
             while (rs.next()) {
                 if(Integer.parseInt(idProducto.getText()) == rs.getInt("idProducto")){
+                    /*informacion[0]=rs.getString(1);
+                    informacion[1]=rs.getString(2);
+                    informacion[2]=rs.getString(3);
+                    informacion[3]=rs.getString(4);
+                    informacion[4]=rs.getString(5);
+
+                    //llenar jtext
+                    modelo.addRow(informacion);*/
                     idProducto.setText(rs.getString("idProducto"));
                     nombreProducto.setText(rs.getString("nombreProducto"));
                     descripcionProducto.setText(rs.getString("descripcionProducto"));
                     stock.setText(String.valueOf(rs.getInt("stock")));
-                    precio.setText(String.valueOf(rs.getFloat("precio")));}
+                    precio.setText(String.valueOf(rs.getFloat("precio")));
+                }/*else {
+                    JOptionPane.showMessageDialog(null, "No se encontró un Producto ese ID");
+                }*/
+
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -154,16 +182,6 @@ public class Productos {
             throw new RuntimeException(e);}
         return esDiferente;}
 
-    public void limpiar(){
-        JFrame frame = new JFrame("Productos");
-        frame.setContentPane(new Productos().Productos);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        closeProductosFrame();
-        frame.setSize(1000, 450);
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-    }
-
     public void mostrarProductos(){
         //genera columnas de la tabla
         DefaultTableModel modelo = new DefaultTableModel();
@@ -198,6 +216,13 @@ public class Productos {
             //throw new RuntimeException(e);
             JOptionPane.showMessageDialog(null,"Error"+e.toString());
         }
+    }
+    private void limpiar() {
+        idProducto.setText("");
+        nombreProducto.setText("");
+        descripcionProducto.setText("");
+        stock.setText("");
+        precio.setText("");
     }
 
     private void closeProductosFrame() {
