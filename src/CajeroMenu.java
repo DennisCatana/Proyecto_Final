@@ -43,7 +43,7 @@ public class CajeroMenu {
     // Configuración de la conexión a la base de datos
     static String DB_URL = "jdbc:mysql://localhost/MEDICAL";
     static String USER = "root";
-    static String PASS = "root";
+    static String PASS = "poo123";
     static String QUERY = "SELECT * FROM Usuario";
 
     //Iterador para el numero de factura
