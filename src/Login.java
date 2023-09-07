@@ -16,7 +16,7 @@ public class Login {
     // Configuración de la conexión a la base de datos
     static String DB_URL = "jdbc:mysql://localhost/MEDICAL";
     static String USER = "root";
-    static String PASS = "poo123";
+    static String PASS = "root";
     static String QUERY = "SELECT * FROM Usuario";
     static String veriusu;
     static String vericontra;
@@ -53,7 +53,7 @@ public class Login {
                             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                             closeLoginFrame();
                             frame.pack();
-                            frame.setSize(1000,500);
+                            frame.setSize(2000, 550);
                             frame.setLocationRelativeTo(null);
                             frame.setVisible(true);
                         }

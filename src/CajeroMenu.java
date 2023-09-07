@@ -45,7 +45,7 @@ public class CajeroMenu {
     // Configuración de la conexión a la base de datos
     static String DB_URL = "jdbc:mysql://localhost/MEDICAL";
     static String USER = "root";
-    static String PASS = "poo123";
+    static String PASS = "root";
     static String QUERY = "SELECT * FROM Usuario";
 
     //Iterador para el numero de factura
@@ -115,17 +115,35 @@ public class CajeroMenu {
                 String codigoProducto = busqueda.getText();
                 int cantidadSeleccionada = Integer.parseInt(cantidad.getText());
 
-                String nombreProducto = buscarNombreProducto(codigoProducto);
-                double valorUnitario = obtenerValorUnitario(codigoProducto);
-                double valorTotal = valorUnitario * cantidadSeleccionada;
 
-                DefaultTableModel model = (DefaultTableModel) Factura.getModel();
-                model.addRow(new Object[]{codigoProducto, cantidadSeleccionada, nombreProducto, valorUnitario, valorTotal});
+                // Obtener el stock actual del producto seleccionado desde la base de datos
+                int stockActual = obtenerStock(codigoProducto);
 
-                calcularTotal(); // Llamar a la función para actualizar el resumen
-                busqueda.setText("");
-                cantidad.setText("");
-                nomProd.setText("");
+                if (cantidadSeleccionada <= 0) {
+                    // Mostrar un mensaje de error si la cantidad es negativa o cero
+                    JOptionPane.showMessageDialog(null, "La cantidad debe ser mayor que cero.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return; // Salir del ActionListener si la cantidad es negativa o cero
+                }
+
+                if (stockActual >= cantidadSeleccionada) {
+                    String nombreProducto = buscarNombreProducto(codigoProducto);
+                    double valorUnitario = obtenerValorUnitario(codigoProducto);
+                    double valorTotal = valorUnitario * cantidadSeleccionada;
+
+                    DefaultTableModel modelo = (DefaultTableModel) Factura.getModel();
+                    modelo.addRow(new Object[]{codigoProducto, cantidadSeleccionada, nombreProducto, valorUnitario, valorTotal});
+
+                    calcularTotal();
+                    busqueda.setText("");
+                    cantidad.setText("");
+                    nomProd.setText("");
+                    // Restar la cantidad seleccionada del stock en la base de datos
+                    restarCantidadDelStockBD(codigoProducto, cantidadSeleccionada);
+                    actualizarTablaDeProductos();
+                } else {
+                    // Mostrar un mensaje de error si el stock es insuficiente
+                    JOptionPane.showMessageDialog(null, "Stock insuficiente para el producto seleccionado.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
             }
         });
 
@@ -243,7 +261,6 @@ public class CajeroMenu {
                 ResultSet generatedKeys = statement.getGeneratedKeys();
                 if (generatedKeys.next()) {
                     int idDetalleVentaGenerado = generatedKeys.getInt(1); // Obtener el idDetalleVenta generado
-                    System.out.println("Número de la Transacción generada: " + idDetalleVentaGenerado);
                 }
             }
         } catch (SQLException ex) {
@@ -489,7 +506,60 @@ public class CajeroMenu {
             JOptionPane.showMessageDialog(null,"Error"+e.toString());
         }
     }
+    private int obtenerStock(String codigoProducto) {
+        int stockActual = 0;
+        try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)) {
+            String sql = "SELECT stock FROM Producto WHERE idProducto = ?";
+            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                statement.setString(1, codigoProducto);
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    if (resultSet.next()) {
+                        stockActual = resultSet.getInt("stock");
+                    }
+                }
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return stockActual;
+    }
 
+    private void restarCantidadDelStockBD(String codigoProducto, int cantidadSeleccionada) {
+        try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)) {
+            String sql = "UPDATE Producto SET stock = stock - ? WHERE idProducto = ?";
+            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                statement.setInt(1, cantidadSeleccionada);
+                statement.setString(2, codigoProducto);
+                statement.executeUpdate();
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void actualizarTablaDeProductos() {
+        DefaultTableModel modelo = (DefaultTableModel) products.getModel();
+        modelo.setRowCount(0); // Limpiar la tabla
+
+        String[] informacion = new String[4];
+
+        try {
+            Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM Producto");
+
+            while (rs.next()) {
+                informacion[0] = rs.getString(1);
+                informacion[1] = rs.getString(2);
+                informacion[2] = rs.getString(4);
+                informacion[3] = rs.getString(5);
+
+                modelo.addRow(informacion);
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al cargar los productos desde la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
     public void closeLoginFrame() {
         JFrame loginFrame = (JFrame) SwingUtilities.getWindowAncestor(CajeroMenu);
         loginFrame.dispose();}
