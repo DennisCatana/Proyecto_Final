@@ -37,6 +37,7 @@ public class CajeroMenu {
     private JLabel adress;
     private JLabel title;
     private JTable products;
+    private JButton agregarButton;
     protected static int idCajeroActual;
     private int numeroNotaVenta = -1;
     private int fac;
@@ -101,9 +102,9 @@ public class CajeroMenu {
             public void actionPerformed(ActionEvent e) {
                 String codigoProducto = nomProd.getText(); // Obtener el código del producto
                 // Realizar la búsqueda en la base de datos
-                String nombreProductoEncontrado = buscarNombreProducto(codigoProducto);
+                buscarPorNombreProducto(codigoProducto);
                 // Actualizar el texto de la etiqueta con el nombre del producto encontrado.
-                nomProd.setText(nombreProductoEncontrado);
+                nomProd.setText("");
             }
         });
 
@@ -124,6 +125,7 @@ public class CajeroMenu {
                 calcularTotal(); // Llamar a la función para actualizar el resumen
                 busqueda.setText("");
                 cantidad.setText("");
+                nomProd.setText("");
             }
         });
 
@@ -190,6 +192,16 @@ public class CajeroMenu {
             }
         });
 
+        agregarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String codigoProducto = busqueda.getText(); // Obtener el código del producto
+                // Realizar la búsqueda en la base de datos
+                String nombreProductoEncontrado = buscarNombreProducto(codigoProducto);
+                // Actualizar el texto de la etiqueta con el nombre del producto encontrado.
+                nomProd.setText(nombreProductoEncontrado);
+            }
+        });
     }
     public static void setIdCajeroActual(int idCajero) {
         idCajeroActual = idCajero;
@@ -321,13 +333,47 @@ public class CajeroMenu {
         loginFrame.dispose();
     }
     // Función para Buscar productos
+    private void buscarPorNombreProducto(String codigoProducto) {
+        String nombreProducto = "Producto no encontrado"; // Valor por defecto
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.addColumn("Id");
+        modelo.addColumn("Nombre");
+        modelo.addColumn("Stock");
+        modelo.addColumn("Precio");
+
+        // Poner las columnas en el modelo hecho en el Jtable
+        products.setModel(modelo);
+
+        //arreglo que almnacena datos
+        String [] informacion=new String[4];//especifico el numero de columnas
+        try{
+            Connection conn = DriverManager.getConnection(DB_URL,USER,PASS);
+            Statement stmt= conn.createStatement();
+            ResultSet rs= stmt.executeQuery("SELECT * FROM Producto where nombreProducto like '%"+codigoProducto+"%'");
+
+            while (rs.next()){
+                //detallo la posicion de dato almacenado en arreglo, con la columna en la quebe ir
+                informacion[0]=rs.getString(1);//num de columna
+                informacion[1]=rs.getString(2);
+                informacion[2]=rs.getString(4);
+                informacion[3]=rs.getString(5);
+
+                // genera una fila por cada ingistro
+                modelo.addRow(informacion);
+            }
+        } catch (SQLException e) {
+            //throw new RuntimeException(e);
+            JOptionPane.showMessageDialog(null,"Error"+e.toString());
+        }
+    }
+
     private String buscarNombreProducto(String codigoProducto) {
         String nombreProducto = "Producto no encontrado"; // Valor por defecto
 
         try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)) {
-            String QueryBuscar = "SELECT nombreProducto FROM Producto WHERE nombreProducto like '%"+codigoProducto+"%'";
+            String QueryBuscar = "SELECT nombreProducto FROM Producto WHERE idProducto = ?";
             try (PreparedStatement statement = connection.prepareStatement(QueryBuscar)) {
-                statement.setString(2, codigoProducto);
+                statement.setString(1, codigoProducto);
                 try (ResultSet resultSet = statement.executeQuery()) {
                     if (resultSet.next()) {
                         nombreProducto = resultSet.getString("nombreProducto");
@@ -392,7 +438,7 @@ public class CajeroMenu {
         JFrame frame = new JFrame("Cajero - Menú Principal");
         frame.setContentPane(new CajeroMenu().CajeroMenu);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(2000, 450);
+        frame.setSize(2000, 550);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }

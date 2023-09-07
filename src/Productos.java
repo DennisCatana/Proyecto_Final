@@ -42,7 +42,7 @@ public class Productos {
         buscarProductoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                buscarProducto();
+                buscarProducto(nombreProducto.getText());
             }
         });
 
@@ -89,8 +89,7 @@ public class Productos {
         });
     }
 
-    public void buscarProducto(){
-
+    public void buscarProducto(String codigoProducto){
         DefaultTableModel modelo = new DefaultTableModel();
         modelo.addColumn("IdProducto");
         modelo.addColumn("Nombre");
@@ -102,33 +101,21 @@ public class Productos {
 
         String [] informacion=new String[5];
 
-        try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
-            String buscar = "SELECT * FROM Producto WHERE idProducto = ?";
-            PreparedStatement stmt = conn.prepareStatement(buscar);
-            stmt.setInt(1, Integer.parseInt(idProducto.getText()));
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
+        try (Connection conn = DriverManager.getConnection(DB_URL,USER,PASS);
+             Statement stmt= conn.createStatement();
+             ResultSet rs= stmt.executeQuery("SELECT * FROM Producto where nombreProducto like '%"+codigoProducto+"%'");){
+            while (rs.next()) {
                 informacion[0] = rs.getString(1);
                 informacion[1] = rs.getString(2);
                 informacion[2] = rs.getString(3);
                 informacion[3] = rs.getString(4);
                 informacion[4] = rs.getString(5);
                 modelo.addRow(informacion);
-
-                // Llenar JTextFields
-                idProducto.setText(rs.getString("idProducto"));
-                nombreProducto.setText(rs.getString("nombreProducto"));
-                descripcionProducto.setText(rs.getString("descripcionProducto"));
-                stock.setText(rs.getString("stock"));
-                precio.setText(rs.getString("precio"));
-            } else {
-                JOptionPane.showMessageDialog(null, "No se encontró un Producto con ese ID");
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
+        nombreProducto.setText("");
     }
     public void agregarProducto(int id, String nombre, String descripcion, int stock, double precio) {
         try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS)) {
