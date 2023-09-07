@@ -36,6 +36,7 @@ public class CajeroMenu {
     private JLabel sucursal;
     private JLabel adress;
     private JLabel title;
+    private JTable products;
     protected static int idCajeroActual;
     private int numeroNotaVenta = -1;
     private int fac;
@@ -52,7 +53,7 @@ public class CajeroMenu {
 
 
     public CajeroMenu() {
-
+        mostrarproductos();
         cerrarBt.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -98,7 +99,7 @@ public class CajeroMenu {
         buscarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String codigoProducto = busqueda.getText(); // Obtener el código del producto
+                String codigoProducto = nomProd.getText(); // Obtener el código del producto
                 // Realizar la búsqueda en la base de datos
                 String nombreProductoEncontrado = buscarNombreProducto(codigoProducto);
                 // Actualizar el texto de la etiqueta con el nombre del producto encontrado.
@@ -324,9 +325,9 @@ public class CajeroMenu {
         String nombreProducto = "Producto no encontrado"; // Valor por defecto
 
         try (Connection connection = DriverManager.getConnection(DB_URL, USER, PASS)) {
-            String QueryBuscar = "SELECT nombreProducto FROM Producto WHERE idProducto = ?";
+            String QueryBuscar = "SELECT nombreProducto FROM Producto WHERE nombreProducto like '%"+codigoProducto+"%'";
             try (PreparedStatement statement = connection.prepareStatement(QueryBuscar)) {
-                statement.setString(1, codigoProducto);
+                statement.setString(2, codigoProducto);
                 try (ResultSet resultSet = statement.executeQuery()) {
                     if (resultSet.next()) {
                         nombreProducto = resultSet.getString("nombreProducto");
@@ -391,7 +392,7 @@ public class CajeroMenu {
         JFrame frame = new JFrame("Cajero - Menú Principal");
         frame.setContentPane(new CajeroMenu().CajeroMenu);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1000, 450);
+        frame.setSize(2000, 450);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
@@ -408,6 +409,39 @@ public class CajeroMenu {
             throw new RuntimeException(e);
         }
         return fac+1;
+    }
+
+    private void mostrarproductos(){
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.addColumn("Id");
+        modelo.addColumn("Nombre");
+        modelo.addColumn("Stock");
+        modelo.addColumn("Precio");
+
+        // Poner las columnas en el modelo hecho en el Jtable
+        products.setModel(modelo);
+
+        //arreglo que almnacena datos
+        String [] informacion=new String[4];//especifico el numero de columnas
+        try{
+            Connection conn = DriverManager.getConnection(DB_URL,USER,PASS);
+            Statement stmt= conn.createStatement();
+            ResultSet rs= stmt.executeQuery("select * from Producto");
+
+            while (rs.next()){
+                //detallo la posicion de dato almacenado en arreglo, con la columna en la quebe ir
+                informacion[0]=rs.getString(1);//num de columna
+                informacion[1]=rs.getString(2);
+                informacion[2]=rs.getString(4);
+                informacion[3]=rs.getString(5);
+
+                // genera una fila por cada ingistro
+                modelo.addRow(informacion);
+            }
+        } catch (SQLException e) {
+            //throw new RuntimeException(e);
+            JOptionPane.showMessageDialog(null,"Error"+e.toString());
+        }
     }
 
     public void closeLoginFrame() {
