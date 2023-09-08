@@ -6,7 +6,8 @@ Login
 ![image](https://github.com/DennisCatana/Proyecto_Final/assets/117744033/b5d2a0e5-6dd1-48aa-a5d1-d32b341780b8)
 <br>
 Cajero <br>
-* Al iniciar seion como cajero se nos desplejara el siguiente Frame en donde se indicara que campos llenar para cuando un cliente quiera comprar un producto. <br>
+* Al iniciar seion como cajero se nos desplejara el siguiente Frame en donde se indicara que campos llenar para cuando un cliente quiera comprar un producto.
+  <br>
 ![image](https://github.com/DennisCatana/Proyecto_Final/assets/117744033/382258ba-24df-4123-bb01-f9e902bb138b)<br>
 <br>
 * Al llenar la fatura tendremos distintas formas para buscar el producto ya sea por còdigo o por nombre, ademas tendremos una tabla en donde estara el stock de nuestros productos para saber en el momento en el cual se este acabando alguno, por ultimo al hacer click en generar factura una factura se generara con todo lo que el cliente a pedido.
@@ -17,7 +18,7 @@ Cajero <br>
 ![image](https://github.com/DennisCatana/Proyecto_Final/assets/117744033/aa8496dc-bf41-45a4-a099-8f5100ca7c23)<br>
 
 <br>
-Administrador
+Administrador <br>
 * Al iniciar seion como administrador se nos desplejara el siguiente menu
 <br>
 
@@ -32,8 +33,11 @@ Alli tendremos tres opciones en las cuales cada una tendra diferentes caracteris
 * Cajeros: En este apartados tendremos igual un CRUD para los cajeros que ingresen ademas que a un cajero se lo puede hacer Administrador.
 <br>
 ![image](https://github.com/DennisCatana/Proyecto_Final/assets/117744033/a8b04709-29ff-40db-a826-2516e8518b1a)<br>
+
 ![image](https://github.com/DennisCatana/Proyecto_Final/assets/117744033/82dde0b3-2d74-4713-bf86-0df61dbedca3)<br>
+
 ![image](https://github.com/DennisCatana/Proyecto_Final/assets/117744033/65ec0795-dc0b-4e13-9635-309ea523666c)<br>
+
 ![image](https://github.com/DennisCatana/Proyecto_Final/assets/117744033/bdbb0abe-f78c-44c2-b753-5d7a498cfb7d)<br>
 
 # Manual de usuario 
