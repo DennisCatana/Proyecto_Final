@@ -8,7 +8,9 @@ Login
 Cajero <br>
 * Al iniciar seion como cajero se nos desplejara el siguiente Frame en donde se indicara que campos llenar para cuando un cliente quiera comprar un producto.
   <br>
+  
 ![image](https://github.com/DennisCatana/Proyecto_Final/assets/117744033/382258ba-24df-4123-bb01-f9e902bb138b)<br>
+
 <br>
 * Al llenar la fatura tendremos distintas formas para buscar el producto ya sea por còdigo o por nombre, ademas tendremos una tabla en donde estara el stock de nuestros productos para saber en el momento en el cual se este acabando alguno, por ultimo al hacer click en generar factura una factura se generara con todo lo que el cliente a pedido.
 <br>
@@ -32,6 +34,7 @@ Alli tendremos tres opciones en las cuales cada una tendra diferentes caracteris
 <br>
 * Cajeros: En este apartados tendremos igual un CRUD para los cajeros que ingresen ademas que a un cajero se lo puede hacer Administrador.
 <br>
+
 ![image](https://github.com/DennisCatana/Proyecto_Final/assets/117744033/a8b04709-29ff-40db-a826-2516e8518b1a)<br>
 
 ![image](https://github.com/DennisCatana/Proyecto_Final/assets/117744033/82dde0b3-2d74-4713-bf86-0df61dbedca3)<br>
