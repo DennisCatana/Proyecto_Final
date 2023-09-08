@@ -20,7 +20,9 @@ Cajero <br>
 <br>
 Administrador
 * Al iniciar seion como administrador se nos desplejara el siguiente menu
-![image](https://github.com/DennisCatana/Proyecto_Final/assets/117744033/22974ca7-dba3-497b-8a11-ffda955217f0)
+<br>
+
+![image](https://github.com/DennisCatana/Proyecto_Final/assets/117744033/22974ca7-dba3-497b-8a11-ffda955217f0)<br>
 
 Alli tendremos tres opciones en las cuales cada una tendra diferentes caracteristicas:
 * Productos: Aqui tendremos un CRUD para los productos que ingresen o salgan de la farmacia
@@ -29,10 +31,11 @@ Alli tendremos tres opciones en las cuales cada una tendra diferentes caracteris
 ![image](https://github.com/DennisCatana/Proyecto_Final/assets/117744033/0a700ec7-be34-4824-9093-e1fcaf9ed425)
 <br>
 * Cajeros: En este apartados tendremos igual un CRUD para los cajeros que ingresen ademas que a un cajero se lo puede hacer Administrador.
-![image](https://github.com/DennisCatana/Proyecto_Final/assets/117744033/a8b04709-29ff-40db-a826-2516e8518b1a)
-![image](https://github.com/DennisCatana/Proyecto_Final/assets/117744033/82dde0b3-2d74-4713-bf86-0df61dbedca3)
-![image](https://github.com/DennisCatana/Proyecto_Final/assets/117744033/65ec0795-dc0b-4e13-9635-309ea523666c)
-![image](https://github.com/DennisCatana/Proyecto_Final/assets/117744033/bdbb0abe-f78c-44c2-b753-5d7a498cfb7d)
+<br>
+![image](https://github.com/DennisCatana/Proyecto_Final/assets/117744033/a8b04709-29ff-40db-a826-2516e8518b1a)<br>
+![image](https://github.com/DennisCatana/Proyecto_Final/assets/117744033/82dde0b3-2d74-4713-bf86-0df61dbedca3)<br>
+![image](https://github.com/DennisCatana/Proyecto_Final/assets/117744033/65ec0795-dc0b-4e13-9635-309ea523666c)<br>
+![image](https://github.com/DennisCatana/Proyecto_Final/assets/117744033/bdbb0abe-f78c-44c2-b753-5d7a498cfb7d)<br>
 
 # Manual de usuario 
 https://youtu.be/4TygGHCUAYU?feature=shared
