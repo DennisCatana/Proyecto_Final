@@ -36,10 +36,10 @@ Alli tendremos tres opciones en las cuales cada una tendra diferentes caracteris
 ![imagen](https://github.com/DennisCatana/Proyecto_Final/assets/117743367/736b285c-54a4-4070-9d45-073675eaa6a5)
 <br>
  Se tiene la opcion de buscar las ventas que ha realizado un cajero en especifico<br>
- ![imagen](https://github.com/DennisCatana/Proyecto_Final/assets/117743367/01ab446c-6e17-4fb1-8dff-b1e167d7d11e)
+![imagen](https://github.com/DennisCatana/Proyecto_Final/assets/117743367/01ab446c-6e17-4fb1-8dff-b1e167d7d11e)
 <br>
  Se tiene un boton que permite volver a ver los registros de ventas<br>
- ![imagen](https://github.com/DennisCatana/Proyecto_Final/assets/117743367/736b285c-54a4-4070-9d45-073675eaa6a5)
+![imagen](https://github.com/DennisCatana/Proyecto_Final/assets/117743367/736b285c-54a4-4070-9d45-073675eaa6a5)
 <br>
 * Cajeros: En este apartados tendremos igual un CRUD para los cajeros que ingresen ademas que a un cajero se lo puede hacer Administrador.
 <br>
