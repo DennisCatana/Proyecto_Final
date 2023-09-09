@@ -1,5 +1,5 @@
 # Proyecto_Final
-# Capturas del proyecto 
+## Capturas del proyecto 
 Login 
 * Nos permitira la opcion de iniciar sesion ya sea como cajero o como administrador
 ![image](https://github.com/DennisCatana/Proyecto_Final/assets/117744033/4b51c3d8-ed73-4e7d-a6f6-469a548892f1)
@@ -32,6 +32,12 @@ Alli tendremos tres opciones en las cuales cada una tendra diferentes caracteris
 ![image](https://github.com/DennisCatana/Proyecto_Final/assets/117744033/7c7d0457-0949-49ad-8595-00592329fe61)
 ![image](https://github.com/DennisCatana/Proyecto_Final/assets/117744033/0a700ec7-be34-4824-9093-e1fcaf9ed425)
 <br>
+* Aqui tenemos un apartado en el cual se pueden ver todas las ventas realizadas
+![img.png](img.png)
+ Se tiene la opcion de buscar las ventas que ha realizado un cajero en especifico
+ ![img_1.png](img_1.png)
+ Se tiene un boton que permite volver a ver los registros de ventas
+ ![img_2.png](img_2.png)
 * Cajeros: En este apartados tendremos igual un CRUD para los cajeros que ingresen ademas que a un cajero se lo puede hacer Administrador.
 <br>
 

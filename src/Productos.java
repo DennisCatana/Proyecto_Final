@@ -20,7 +20,7 @@ public class Productos {
     private JTable visor;
     static String DB_URL = "jdbc:mysql://localhost/medical";
     static String USER = "root";
-    static String PASS = "poo123";
+    static String PASS = "root";
     static String QUERY = "SELECT * FROM producto";
 
     public Productos() {
@@ -215,12 +215,4 @@ public class Productos {
         JFrame loginFrame = (JFrame) SwingUtilities.getWindowAncestor(Productos);
         loginFrame.dispose();}
 
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Productos");
-        frame.setContentPane(new Productos().Productos);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1000, 450);
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-    }
 }

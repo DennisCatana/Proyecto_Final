@@ -13,7 +13,7 @@ public class Ventas {
     private JButton ventasButton;
     static final String DB_URL="jdbc:mysql://localhost/Medical";
     static final String USER="root";
-    static final String PASS="poo123";
+    static final String PASS="root";
     static final String QUERY="Select * From NotaDeVenta";
 
     public Ventas() {
@@ -174,13 +174,5 @@ public class Ventas {
     private void closeVentasFrame() {
         JFrame loginFrame = (JFrame) SwingUtilities.getWindowAncestor(Ventas);
         loginFrame.dispose();
-    }
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Ventas");
-        frame.setContentPane(new Ventas().Ventas);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1000, 450);
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
     }
 }

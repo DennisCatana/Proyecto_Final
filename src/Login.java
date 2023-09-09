@@ -108,11 +108,6 @@ public class Login {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-
-        // Impresión de la información verificada (para propósitos de depuración)
-        /*System.out.println("El usuario es: " + veriusu);
-        System.out.println("La contraseña es: " + vericontra);
-        System.out.println("El cargo es: " + selec);*/
     }
 
     public static void main(String[] args) {

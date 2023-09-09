@@ -39,7 +39,6 @@ public class CajeroMenu {
     private JTable products;
     private JButton agregarButton;
     protected static int idCajeroActual;
-    private int numeroNotaVenta = -1;
     private int fac;
 
     // Configuración de la conexión a la base de datos
@@ -451,15 +450,6 @@ public class CajeroMenu {
         totalModel.setValueAt(formatoTotal, 2, 1);     // Actualizar el valor del Total en la tabla
     }
 
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Cajero - Menú Principal");
-        frame.setContentPane(new CajeroMenu().CajeroMenu);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(2000, 550);
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-    }
-
     int numfac(){
         String busnumfac = "SELECT * FROM NotaDeVenta";
         try(Connection conn = DriverManager.getConnection(DB_URL,USER,PASS);
@@ -560,9 +550,7 @@ public class CajeroMenu {
             JOptionPane.showMessageDialog(null, "Error al cargar los productos desde la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-    public void closeLoginFrame() {
-        JFrame loginFrame = (JFrame) SwingUtilities.getWindowAncestor(CajeroMenu);
-        loginFrame.dispose();}
+
     private void createUIComponents() {
         // TODO: place custom component creation code here
         Factura = new JTable();

@@ -23,7 +23,7 @@ public class Cajeros {
 
     static final String DB_URL="jdbc:mysql://localhost/Medical";
     static final String USER="root";
-    static final String PASS="poo123";
+    static final String PASS="root";
 
     //la tabla usuarios contiene cajeros y administradores, por ello especifico que tipo de usuario deseo visualizar en la tabla
     static final String QUERY="Select * From Usuario WHERE tipoUsuario = 'cajero'";
@@ -115,14 +115,6 @@ public class Cajeros {
     private void closeCajerosFrame(){
         JFrame loginFrame = (JFrame) SwingUtilities.getWindowAncestor(Cajeros);
         loginFrame.dispose();
-    }
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Cajeros");
-        frame.setContentPane(new Cajeros().Cajeros);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1000, 450);
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
     }
     //Metodos de los botones
     public void Mostrar(){
