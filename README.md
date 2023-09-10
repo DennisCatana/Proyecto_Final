@@ -32,14 +32,15 @@ Alli tendremos tres opciones en las cuales cada una tendra diferentes caracteris
 ![image](https://github.com/DennisCatana/Proyecto_Final/assets/117744033/7c7d0457-0949-49ad-8595-00592329fe61)
 ![image](https://github.com/DennisCatana/Proyecto_Final/assets/117744033/0a700ec7-be34-4824-9093-e1fcaf9ed425)
 <br>
-* Aqui tenemos un apartado en el cual se pueden ver todas las ventas realizadas<br>
-![image](https://github.com/DennisCatana/Proyecto_Final/assets/117743367/736b285c-54a4-4070-9d45-073675eaa6a5)
+Aqui tenemos un apartado en el cual se pueden ver todas las ventas realizadas<br>
+<img width="732" alt="image" src="https://github.com/DennisCatana/Proyecto_Final/assets/117742977/7b842f18-876e-4f4d-a176-ac46e2e2bfc9">
 <br>
  Se tiene la opcion de buscar las ventas que ha realizado un cajero en especifico<br>
-![image](https://github.com/DennisCatana/Proyecto_Final/assets/117743367/01ab446c-6e17-4fb1-8dff-b1e167d7d11e)
+<img width="730" alt="image" src="https://github.com/DennisCatana/Proyecto_Final/assets/117742977/31dee246-3703-45da-a037-5606d812ba19">
+
 <br>
  Se tiene un boton que permite volver a ver los registros de ventas<br>
-![image](https://github.com/DennisCatana/Proyecto_Final/assets/117743367/736b285c-54a4-4070-9d45-073675eaa6a5)
+<img width="730" alt="image" src="https://github.com/DennisCatana/Proyecto_Final/assets/117742977/722dd376-955f-4b23-bf2a-bc8d7fe3ee45">
 <br>
 * Cajeros: En este apartados tendremos igual un CRUD para los cajeros que ingresen ademas que a un cajero se lo puede hacer Administrador.
 <br>
