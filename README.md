@@ -1,4 +1,7 @@
 # Proyecto_Final
+
+## Manual de usuario 
+https://youtu.be/4TygGHCUAYU?feature=shared
 ## Capturas del proyecto 
 Login 
 * Nos permitira la opcion de iniciar sesion ya sea como cajero o como administrador
@@ -54,5 +57,3 @@ Aqui tenemos un apartado en el cual se pueden ver todas las ventas realizadas<br
 
 ![image](https://github.com/DennisCatana/Proyecto_Final/assets/117744033/bdbb0abe-f78c-44c2-b753-5d7a498cfb7d)<br>
 
-# Manual de usuario 
-https://youtu.be/4TygGHCUAYU?feature=shared
